@@ -8,7 +8,7 @@ import Services from './components/Services';
 import Technologies from './components/Technologies';
 import ProjectsSlider from './components/ProjectsSlider';
 import Testimonials from './components/Testimonials';
-import Cards from './components/cards';
+import Cards from './components/Cards';
 import CTA from './components/CTA';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
