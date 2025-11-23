@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
         <div className="mb-8">
            {/* Replace 'src' with the actual path to your logo file */}
            <img 
-             src="\images\logo (1).png" 
+             src="\logo (1).png" 
              alt="Ishikawa Solutions" 
              className="h-12 md:h-14 w-auto object-contain"
            />

@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
         <a href="/" className="flex items-center gap-2">
             {/* Replace 'src' with your actual logo file path */}
             <img 
-                src="\images\logo (1).png" 
+                src="\logo (1).png" 
                 alt="Ishikawa Solutions" 
                 className="h-8 md:h-10 w-auto object-contain"
             />

@@ -98,12 +98,12 @@ const BeliefsAndStrength: React.FC = () => {
 
             {/* Decorative Image (Bottom Right) */}
             <div className="absolute bottom-0 right-0 w-[60%] h-[70%] pointer-events-none z-0">
-               {/* REPLACE SRC WITH: "/images/swirls 1.png" 
+               {/* REPLACE SRC WITH: "/swirls 1.png" 
                   I am using a remote placeholder so you can see the effect immediately.
                */}
                <img 
                  ref={leftImageRef}
-                 src="\images\swirls 1.png" 
+                 src="\swirls 1.png" 
                  alt="Abstract Swirl" 
                  className="w-full h-full object-cover object-bottom opacity-100 mix-blend-multiply mask-image-gradient"
                  style={{ 
@@ -145,12 +145,12 @@ const BeliefsAndStrength: React.FC = () => {
 
             {/* Decorative Image (Bottom Right) */}
             <div className="absolute -bottom-5 -right-5 w-[55%] h-[60%] pointer-events-none z-0">
-                {/* REPLACE SRC WITH: "/images/Group 48095747.png" 
+                {/* REPLACE SRC WITH: "/Group 48095747.png" 
                    I am using a remote placeholder for 3D UI elements.
                 */}
                 <img 
                    ref={rightImageRef}
-                   src="\images\Groupddd.png"
+                   src="\Groupddd.png"
                    alt="3D UI Elements"
                    className="w-full h-full object-contain drop-shadow-2xl"
                 />

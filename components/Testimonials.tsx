@@ -192,7 +192,7 @@ const Testimonials: React.FC = () => {
                 <div className="hidden lg:block absolute -left-32 top-1/2 -translate-y-1/2">
                    <img 
                        ref={emojiLeftRef}
-                       src="\images\IMG_1293 1.png" 
+                       src="\IMG_1293 1.png" 
                        alt="Party Emoji" 
                        className="w-24 h-24 lg:w-28 lg:h-28 object-contain"
                    />
@@ -213,7 +213,7 @@ const Testimonials: React.FC = () => {
                 <div className="hidden lg:block absolute -right-28 top-1/2 -translate-y-1/2">
                    <img 
                        ref={emojiRightRef}
-                       src="\images\IMG_1293 2.png" 
+                       src="\IMG_1293 2.png" 
                        alt="Happy Emoji" 
                        className="w-24 h-24 lg:w-28 lg:h-28 object-contain"
                    />

@@ -76,7 +76,7 @@ const TransformSection: React.FC = () => {
              >
                 <div className="animate-float">
                   <img 
-                     src="\images\wewr.png" 
+                     src="\wewr.png" 
                      alt="Dashboard Interface on Tablet" 
                      className="w-full h-auto object-contain drop-shadow-2xl scale-110"
                      onError={(e) => {

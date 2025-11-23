@@ -152,7 +152,7 @@ const LandingPage: React.FC = () => {
             */}
             <div className="absolute bottom-0 right-0 lg:right-10 w-full lg:w-1/2 h-full flex items-end justify-center lg:justify-end pointer-events-none z-20">
                <img 
-                 src="\images\3d illustratiwon.png" 
+                 src="\3d illustratiwon.png" 
                  alt="3D Character" 
                  // 'h-[135%]' makes it taller than the blue box.
                  // 'object-bottom' ensures the feet stay at the bottom, so the head grows UPWARDS.

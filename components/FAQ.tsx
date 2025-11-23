@@ -92,7 +92,7 @@ const FAQ: React.FC = () => {
                 Replace 'src' with your local image path: "/images/your-3d-guy.png" 
             */}
             <img 
-                src="\images\Untitled design 1 (1).png" 
+                src="\Untitled design 1 (1).png" 
                 alt="FAQ Illustration" 
                 className="w-[300px] md:w-[450px] object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500" 
             />
