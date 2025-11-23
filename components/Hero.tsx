@@ -144,7 +144,7 @@ const Hero = () => {
           {/* 3. The Main Image */}
           <img
             ref={imageRef}
-            src="https://w0477451.github.io/ishikawa-solutions/images/Web%20development%20image%20(1).png" 
+            src="https://w0477451.github.io/ishikawa-solutions/images/Web.png" 
             alt="Web Development Illustration"
             className="relative z-20 w-full max-w-[400px] lg:max-w-[750px] lg:scale-110 object-contain mb-4 lg:mb-16 drop-shadow-2xl"
           />
