@@ -11,6 +11,7 @@ import Testimonials from './components/Testimonials';
 import Cards from './components/Cards';
 import CTA from './components/CTA';
 import FAQ from './components/FAQ';
+import AIChatbot from './components/AIChatbot';
 import Footer from './components/Footer';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Cards />
         <CTA />
         <FAQ />
+        <AIChatbot />
         <Footer />
       </main>
     </SmoothScroll>
