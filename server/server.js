@@ -344,6 +344,11 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', db: 'mysql' }));
 app.use('/admin', express.static(path.join(__dirname, '../admin'), { index: false }));
 app.get('/admin/*', (req, res) => res.sendFile(path.join(__dirname, '../admin/index.html')));
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT} (MySQL Mode)`);
-});
+// Only listen if run directly (not imported)
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT} (MySQL Mode)`);
+  });
+}
+
+export default app;

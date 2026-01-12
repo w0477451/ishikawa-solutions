@@ -205,7 +205,7 @@ const AIChatbot: React.FC<AIChatbotProps> = ({
       // Prevent duplicate capture if already captured recently?
       // For now, we'll just submit every time we see it to update potential info
 
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
 
       const utmSource = sessionStorage.getItem('utm_source') || 'direct';
       const utmMedium = sessionStorage.getItem('utm_medium');
@@ -264,7 +264,7 @@ const AIChatbot: React.FC<AIChatbotProps> = ({
 
 
     // Track chatbot interaction immediately
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const API_URL = import.meta.env.VITE_API_URL || '/api';
     fetch(`${API_URL}/analytics`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
