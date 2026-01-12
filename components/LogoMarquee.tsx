@@ -32,14 +32,14 @@ const LogoMarquee: React.FC = () => {
         }}
       >
         {/* Wrapper 1 */}
-        <div className="animate-marquee whitespace-nowrap flex gap-16 lg:gap-24 items-center group-hover:pause">
+        <div className="animate-marquee whitespace-nowrap flex gap-8 md:gap-16 lg:gap-24 items-center group-hover:pause">
           {[...LOGOS, ...LOGOS].map((logo, index) => (
             <LogoItem key={index} logo={logo} />
           ))}
         </div>
 
         {/* Wrapper 2 */}
-        <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex gap-16 lg:gap-24 items-center group-hover:pause">
+        <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex gap-8 md:gap-16 lg:gap-24 items-center group-hover:pause">
           {[...LOGOS, ...LOGOS].map((logo, index) => (
             <LogoItem key={`dup-${index}`} logo={logo} />
           ))}

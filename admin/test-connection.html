@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Connection</title>
+</head>
+<body>
+    <h1>Admin Dashboard Connection Test</h1>
+    <button onclick="testConnection()">Test Backend Connection</button>
+    <div id="result"></div>
+
+    <script>
+        async function testConnection() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                // Test health endpoint
+                const response = await fetch('http://localhost:5000/api/health');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h2 style="color: green;">✅ Backend is Running!</h2>
+                        <p>Status: ${data.status}</p>
+                        <p>Timestamp: ${data.timestamp}</p>
+                        <p><a href="http://localhost:5000/admin">Go to Admin Dashboard</a></p>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `<h2 style="color: red;">❌ Backend Error</h2><p>${JSON.stringify(data)}</p>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h2 style="color: red;">❌ Connection Failed</h2>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <h3>Possible Issues:</h3>
+                    <ul>
+                        <li>Backend server is not running</li>
+                        <li>Server is running on a different port</li>
+                        <li>Firewall is blocking the connection</li>
+                        <li>CORS is not configured</li>
+                    </ul>
+                    <h3>How to Fix:</h3>
+                    <ol>
+                        <li>Open terminal in the <code>server</code> folder</li>
+                        <li>Run: <code>npm start</code></li>
+                        <li>Wait for "Server running on port 5000"</li>
+                        <li>Refresh this page and test again</li>
+                    </ol>
+                `;
+            }
+        }
+        
+        // Auto-test on load
+        window.onload = testConnection;
+    </script>
+</body>
+</html>
+

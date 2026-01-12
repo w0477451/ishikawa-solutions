@@ -57,14 +57,14 @@ const Testimonials: React.FC = () => {
   // --- GSAP ANIMATION ---
   useEffect(() => {
     let ctx = gsap.context(() => {
-      
+
       // 1. TEXT SCROLL EFFECT (Applied to ALL lines)
       const animateText = (className: string) => {
         const words = textContainerRef.current?.querySelectorAll(className);
         if (words && words.length > 0) {
-          gsap.fromTo(words, 
+          gsap.fromTo(words,
             { color: "#e5e7eb" }, // Start: Very Light Gray (almost invisible)
-            { 
+            {
               color: "#000000",   // End: ALL lines turn BLACK now
               stagger: 0.05,
               duration: 1,
@@ -81,9 +81,9 @@ const Testimonials: React.FC = () => {
       };
 
       // Animate all lines to Black
-      animateText(".word-line-1"); 
-      animateText(".word-line-2"); 
-      animateText(".word-line-3"); 
+      animateText(".word-line-1");
+      animateText(".word-line-2");
+      animateText(".word-line-3");
 
       // 2. Cards Stagger Animation
       const cards = cardsRef.current?.children;
@@ -94,7 +94,7 @@ const Testimonials: React.FC = () => {
             y: 0,
             opacity: 1,
             duration: 0.8,
-            stagger: 0.2, 
+            stagger: 0.2,
             ease: "back.out(1.7)",
             scrollTrigger: {
               trigger: cardsRef.current,
@@ -130,8 +130,8 @@ const Testimonials: React.FC = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-20 lg:py-28 bg-white relative overflow-hidden font-sans flex flex-col items-center w-full">
-      
+    <section ref={containerRef} className="py-16 lg:py-28 bg-white relative overflow-hidden font-sans flex flex-col items-center w-full">
+
       {/* Load Urbanist Font */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
@@ -140,119 +140,119 @@ const Testimonials: React.FC = () => {
 
       {/* --- BACKGROUND DECORATIVE ELEMENTS --- */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[693px] h-[693px] pointer-events-none z-0 flex justify-center items-center opacity-70">
-         <svg width="100%" height="100%" viewBox="0 0 693 693" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M645.51 339.521C672.547 344.053 693.476 367.166 689.727 394.324C666.432 563.059 521.641 693 346.5 693C155.133 693 0 537.867 0 346.5C0 155.133 155.133 0 346.5 0C532.003 0 171.523 260.064 645.51 339.521Z" fill="#E8F1FA"/>
-         </svg>
+        <svg width="100%" height="100%" viewBox="0 0 693 693" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M645.51 339.521C672.547 344.053 693.476 367.166 689.727 394.324C666.432 563.059 521.641 693 346.5 693C155.133 693 0 537.867 0 346.5C0 155.133 155.133 0 346.5 0C532.003 0 171.523 260.064 645.51 339.521Z" fill="#E8F1FA" />
+        </svg>
       </div>
 
       <div className="absolute top-10 right-0 w-[600px] h-[500px] pointer-events-none z-0 translate-x-1/4 -translate-y-1/4">
-         <svg viewBox="0 0 500 400" className="w-full h-full">
-             <path 
-               d="M50 350 C 200 50 400 50 450 150" 
-               fill="none" 
-               stroke="url(#gradient_line)" 
-               strokeWidth="8" 
-               strokeLinecap="round" 
-             />
-             <defs>
-                 <linearGradient id="gradient_line" x1="50" y1="350" x2="450" y2="150" gradientUnits="userSpaceOnUse">
-                     <stop stopColor="#d946ef" /> 
-                     <stop offset="1" stopColor="#3b82f6" /> 
-                 </linearGradient>
-             </defs>
-         </svg>
+        <svg viewBox="0 0 500 400" className="w-full h-full">
+          <path
+            d="M50 350 C 200 50 400 50 450 150"
+            fill="none"
+            stroke="url(#gradient_line)"
+            strokeWidth="8"
+            strokeLinecap="round"
+          />
+          <defs>
+            <linearGradient id="gradient_line" x1="50" y1="350" x2="450" y2="150" gradientUnits="userSpaceOnUse">
+              <stop stopColor="#d946ef" />
+              <stop offset="1" stopColor="#3b82f6" />
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
 
       {/* --- MAIN CONTENT --- */}
       <div className="container mx-auto px-4 relative z-10 w-full max-w-7xl">
-        
+
         {/* HEADER SECTION (Zig-Zag Alignment + SAME FONT SIZE) */}
         <div ref={textContainerRef} className="relative w-full max-w-6xl mx-auto mb-16 lg:mb-20 pt-10 flex flex-col gap-3 lg:gap-4">
-            
-            {/* 1. Main Title - RIGHT ALIGNED */}
-            <h2 className="relative z-10 text-4xl md:text-5xl lg:text-6xl font-urbanist font-bold tracking-tight flex flex-wrap justify-end gap-x-[0.25em]">
-               {line1.map((word, i) => (
-                 <span key={i} className="word-line-1 text-[#e5e7eb]">
-                   {word}
-                 </span>
-               ))}
-            </h2>
 
-            {/* 2. Middle Title - LEFT ALIGNED + Left Icon */}
-            <div className="relative w-full flex justify-start">
-                <h3 className="relative z-10 text-4xl md:text-5xl lg:text-6xl font-urbanist font-bold tracking-tight flex flex-wrap justify-start gap-x-[0.25em]">
-                    {line2.map((word, i) => (
-                        <span key={i} className="word-line-2 text-[#e5e7eb]">
-                            {word}
-                        </span>
-                    ))}
-                </h3>
-                
-                {/* Left Icon (Party) */}
-                <div className="hidden lg:block absolute -left-32 top-1/2 -translate-y-1/2">
-                   <img 
-                       ref={emojiLeftRef}
-                       src="\IMG_1293 1.png" 
-                       alt="Party Emoji" 
-                       className="w-24 h-24 lg:w-28 lg:h-28 object-contain"
-                   />
-                </div>
+          {/* 1. Main Title - RIGHT ALIGNED */}
+          <h2 className="relative z-10 text-3xl md:text-5xl lg:text-6xl font-urbanist font-bold tracking-tight flex flex-wrap justify-end gap-x-[0.25em]">
+            {line1.map((word, i) => (
+              <span key={i} className="word-line-1 text-[#e5e7eb]">
+                {word}
+              </span>
+            ))}
+          </h2>
+
+          {/* 2. Middle Title - LEFT ALIGNED + Left Icon */}
+          <div className="relative w-full flex justify-start">
+            <h3 className="relative z-10 text-3xl md:text-5xl lg:text-6xl font-urbanist font-bold tracking-tight flex flex-wrap justify-start gap-x-[0.25em]">
+              {line2.map((word, i) => (
+                <span key={i} className="word-line-2 text-[#e5e7eb]">
+                  {word}
+                </span>
+              ))}
+            </h3>
+
+            {/* Left Icon (Party) */}
+            <div className="hidden lg:block absolute -left-32 top-1/2 -translate-y-1/2">
+              <img
+                ref={emojiLeftRef}
+                src="\IMG_1293 1.png"
+                alt="Party Emoji"
+                className="w-24 h-24 lg:w-28 lg:h-28 object-contain"
+              />
             </div>
+          </div>
 
-            {/* 3. Subtitle - RIGHT ALIGNED + Right Icon */}
-            <div className="relative w-full flex justify-end">
-                <p className="relative z-10 text-4xl md:text-5xl lg:text-6xl font-urbanist font-bold tracking-tight flex flex-wrap justify-end gap-x-[0.25em]">
-                    {line3.map((word, i) => (
-                        <span key={i} className="word-line-3 text-[#e5e7eb]">
-                            {word}
-                        </span>
-                    ))}
-                </p>
+          {/* 3. Subtitle - RIGHT ALIGNED + Right Icon */}
+          <div className="relative w-full flex justify-end">
+            <p className="relative z-10 text-3xl md:text-5xl lg:text-6xl font-urbanist font-bold tracking-tight flex flex-wrap justify-end gap-x-[0.25em]">
+              {line3.map((word, i) => (
+                <span key={i} className="word-line-3 text-[#e5e7eb]">
+                  {word}
+                </span>
+              ))}
+            </p>
 
-                 {/* Right Icon (Happy) */}
-                <div className="hidden lg:block absolute -right-28 top-1/2 -translate-y-1/2">
-                   <img 
-                       ref={emojiRightRef}
-                       src="\IMG_1293 2.png" 
-                       alt="Happy Emoji" 
-                       className="w-24 h-24 lg:w-28 lg:h-28 object-contain"
-                   />
-                </div>
+            {/* Right Icon (Happy) */}
+            <div className="hidden lg:block absolute -right-28 top-1/2 -translate-y-1/2">
+              <img
+                ref={emojiRightRef}
+                src="\IMG_1293 2.png"
+                alt="Happy Emoji"
+                className="w-24 h-24 lg:w-28 lg:h-28 object-contain"
+              />
             </div>
+          </div>
 
         </div>
 
         {/* CARDS GRID */}
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 px-2 lg:px-10">
-            {TESTIMONIALS.map((item) => (
-                <div 
-                    key={item.id} 
-                    className="bg-white rounded-[24px] p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] border border-gray-100 transition-all duration-300 hover:-translate-y-2 flex flex-col h-full justify-between"
-                >
-                    <div className="mb-8">
-                        <p className="font-urbanist text-gray-600 text-[15px] leading-relaxed font-medium">
-                            {item.text}
-                        </p>
-                    </div>
+          {TESTIMONIALS.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white rounded-[24px] p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] border border-gray-100 transition-all duration-300 hover:-translate-y-2 flex flex-col h-full justify-between"
+            >
+              <div className="mb-8">
+                <p className="font-urbanist text-gray-600 text-[15px] leading-relaxed font-medium">
+                  {item.text}
+                </p>
+              </div>
 
-                    <div className="flex items-center justify-between border-t border-gray-50 pt-6">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-gray-100">
-                                <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                            </div>
-                            <div className="flex flex-col">
-                                <h4 className="font-urbanist font-bold text-gray-900 text-sm">{item.name}</h4>
-                                <span className="font-urbanist text-xs text-gray-400">{item.role}</span>
-                            </div>
-                        </div>
-                        <div className="flex gap-0.5">
-                            {[...Array(item.stars)].map((_, i) => (
-                                <StarIcon key={i} />
-                            ))}
-                        </div>
-                    </div>
+              <div className="flex items-center justify-between border-t border-gray-50 pt-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 border border-gray-100">
+                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex flex-col">
+                    <h4 className="font-urbanist font-bold text-gray-900 text-sm">{item.name}</h4>
+                    <span className="font-urbanist text-xs text-gray-400">{item.role}</span>
+                  </div>
                 </div>
-            ))}
+                <div className="flex gap-0.5">
+                  {[...Array(item.stars)].map((_, i) => (
+                    <StarIcon key={i} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
       </div>

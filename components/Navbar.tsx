@@ -16,9 +16,8 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 font-urbanist ${
-        isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
-      }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 font-urbanist ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'
+        }`}
     >
       {/* Load Urbanist Font */}
       <style>{`
@@ -27,15 +26,15 @@ const Navbar: React.FC = () => {
       `}</style>
 
       <div className="container mx-auto px-6 flex justify-between items-center">
-        
+
         {/* --- LOGO SECTION (PNG) --- */}
         <a href="/" className="flex items-center gap-2">
-            {/* Replace 'src' with your actual logo file path */}
-            <img 
-                src="\logo (1).png" 
-                alt="Ishikawa Solutions" 
-                className="h-8 md:h-10 w-auto object-contain"
-            />
+          {/* Replace 'src' with your actual logo file path */}
+          <img
+            src="\logo1.webp"
+            alt="Ishikawa Solutions"
+            className="h-8 md:h-10 w-auto object-contain"
+          />
         </a>
 
         {/* Desktop Menu */}

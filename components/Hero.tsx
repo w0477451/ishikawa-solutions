@@ -22,7 +22,7 @@ const Hero = () => {
       });
 
       // 2. Ribbon Draws in
-      tl.fromTo(ribbonRef.current, 
+      tl.fromTo(ribbonRef.current,
         { strokeDashoffset: 3000 },
         { strokeDashoffset: 0, duration: 2.5, ease: 'power2.inOut' },
         '-=0.8'
@@ -34,7 +34,7 @@ const Hero = () => {
         opacity: 0,
         duration: 1.2,
         scale: 0.9,
-      }, '-=2'); 
+      }, '-=2');
 
       // 4. Text elements stagger
       tl.from('.hero-anim', {
@@ -49,52 +49,62 @@ const Hero = () => {
     return () => ctx.revert();
   }, []);
 
+  /* Throttled Mouse Move */
+  const rafId = useRef<number | null>(null);
+
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (window.innerWidth < 768) return; 
-
+    if (window.innerWidth < 768) return;
     if (!imageRef.current || !ribbonRef.current) return;
-    const { clientX, clientY } = e;
-    const x = (clientX / window.innerWidth - 0.5) * 30;
-    const y = (clientY / window.innerHeight - 0.5) * 30;
 
-    gsap.to(imageRef.current, {
-      x: x,
-      y: y,
-      duration: 1,
-      ease: 'power2.out'
-    });
+    // Throttle with requestAnimationFrame
+    if (rafId.current) return;
 
-    gsap.to(ribbonRef.current, {
-      x: x * -0.5,
-      y: y * -0.5,
-      duration: 1.5,
-      ease: 'power2.out'
+    rafId.current = requestAnimationFrame(() => {
+      const { clientX, clientY } = e;
+      const x = (clientX / window.innerWidth - 0.5) * 30;
+      const y = (clientY / window.innerHeight - 0.5) * 30;
+
+      gsap.to(imageRef.current, {
+        x: x,
+        y: y,
+        duration: 1,
+        ease: 'power2.out'
+      });
+
+      gsap.to(ribbonRef.current, {
+        x: x * -0.5,
+        y: y * -0.5,
+        duration: 1.5,
+        ease: 'power2.out'
+      });
+
+      rafId.current = null;
     });
   };
 
   return (
-    <section 
-      ref={containerRef} 
+    <section
+      ref={containerRef}
       onMouseMove={handleMouseMove}
       className="relative w-full min-h-screen bg-[#F4F6F9] flex items-center overflow-x-hidden overflow-y-hidden font-sans py-12 lg:py-0"
     >
       <div className="container mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-12 lg:gap-8 items-center relative z-10">
-        
+
         {/* --- LEFT COLUMN: Text Content --- */}
         <div className="max-w-xl pt-4 lg:pt-0 z-30 order-1">
           <div className="hero-anim inline-flex items-center justify-center px-4 py-1.5 mb-6 lg:mb-8 rounded-full bg-[#E3F2FD] text-[#2F80ED] font-bold text-[10px] lg:text-[11px] tracking-widest uppercase">
             Web & Design Agency
           </div>
-          
+
           <h1 ref={titleRef} className="hero-anim text-4xl lg:text-[3.8rem] leading-[1.2] lg:leading-[1.15] font-bold text-[#1a1a1a] mb-6">
             We Always Deliver <br />
             More Than Expected
           </h1>
-          
+
           <p className="hero-anim text-base lg:text-lg text-gray-500 mb-8 lg:mb-10 leading-relaxed max-w-md">
             Boosting Your Success in Web Development and Digital Marketing.
           </p>
-          
+
           <div className="hero-anim flex flex-wrap items-center gap-4 lg:gap-5">
             <button className="group relative px-6 lg:px-8 py-3 lg:py-3.5 rounded-full bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] text-white font-bold text-sm tracking-wide shadow-lg transition-all duration-300 hover:-translate-y-0.5">
               Get started
@@ -107,17 +117,18 @@ const Hero = () => {
 
         {/* --- RIGHT COLUMN: Visuals --- */}
         <div className="relative h-[400px] lg:h-[800px] flex items-end justify-center lg:justify-end order-2 lg:order-2 mt-10 lg:mt-0">
-          
+
           {/* 1. The Blue Arch Background */}
-          <div 
+          <div
             ref={archRef}
             className="absolute bottom-0 right-1/2 translate-x-1/2 lg:translate-x-0 lg:right-10 w-[90%] h-[90%] lg:w-[500px] lg:h-[650px] bg-[#CAE3FF] rounded-t-[200px] lg:rounded-t-[300px] z-0"
+            style={{ willChange: 'transform' }}
           ></div>
 
           {/* 2. SVG RIBBON */}
-          <svg 
-            className="absolute -top-24 left-[50%] -translate-x-[50%] w-[160%] lg:w-[120%] lg:left-auto lg:translate-x-0 lg:-top-32 lg:-left-10 h-[140%] pointer-events-none z-10 overflow-visible" 
-            viewBox="0 0 1000 800" 
+          <svg
+            className="absolute -top-24 left-[50%] -translate-x-[50%] w-[160%] lg:w-[120%] lg:left-auto lg:translate-x-0 lg:-top-32 lg:-left-10 h-[140%] pointer-events-none z-10 overflow-visible"
+            viewBox="0 0 1000 800"
             preserveAspectRatio="xMidYMid meet"
           >
             <defs>
@@ -128,24 +139,29 @@ const Hero = () => {
                 <stop offset="100%" stopColor="#EC4899" />
               </linearGradient>
             </defs>
-            
-            <path 
+
+            <path
               ref={ribbonRef}
-              d="M-50,350 C50,300 200,50 450,250 C600,400 550,650 350,550 C200,450 400,0 900,300" 
-              fill="none" 
-              stroke="url(#ribbonGradient)" 
-              // CHANGED HERE: Made line thinner (15 instead of 40)
-              strokeWidth="15" 
+              d="M-50,350 C50,300 200,50 450,250 C600,400 550,650 350,550 C200,450 400,0 900,300"
+              fill="none"
+              stroke="url(#ribbonGradient)"
+              strokeWidth="15"
               strokeLinecap="round"
-              strokeDasharray="3000" 
+              strokeDasharray="3000"
+              style={{ willChange: 'transform, stroke-dashoffset' }}
             />
           </svg>
 
-          {/* 3. The Main Image */}
+          {/* 3. The Main Image (LCP Candidate) */}
           <img
             ref={imageRef}
-            src="/Web%20development%20image%20(1).png" 
+            src="/hero1.webp"
             alt="Web Development Illustration"
+            width="875"
+            height="640"
+            fetchPriority="high"
+            decoding="async"
+            style={{ willChange: 'transform' }}
             className="relative z-20 w-full max-w-[400px] lg:max-w-[750px] lg:scale-110 object-contain mb-4 lg:mb-16 drop-shadow-2xl"
           />
         </div>

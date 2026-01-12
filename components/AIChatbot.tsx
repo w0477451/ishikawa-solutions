@@ -1,277 +1,517 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, Send, X, Loader2, AlertCircle, Bug, Terminal, Plus, Mic, ExternalLink } from 'lucide-react';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import React, { useState, useRef, useEffect } from "react";
+import X from "lucide-react/dist/esm/icons/x";
+import Send from "lucide-react/dist/esm/icons/send";
+import Sparkles from "lucide-react/dist/esm/icons/sparkles";
+import MessageSquare from "lucide-react/dist/esm/icons/message-square";
+import ChevronRight from "lucide-react/dist/esm/icons/chevron-right";
+import User from "lucide-react/dist/esm/icons/user";
+import Bot from "lucide-react/dist/esm/icons/bot";
+import RefreshCw from "lucide-react/dist/esm/icons/refresh-cw";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
-// --- CONFIGURATION ---
-const API_KEY = "AIzaSyBftrds9f1MYIrUsVOUs646G6tiGNB9fRE"; 
+const API_KEY = "AIzaSyCX0oV-yVScz1ymWkLvJHPua_zw4gMV8W4";
+const API_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:streamGenerateContent";
 
-const ISHIKAWA_KNOWLEDGE_BASE = `
-You are a helpful, human-like sales assistant named "Srikhar" for Ishikawa Solutions.
-Your goal is to be friendly, concise, and encourage users to book a service.
+const SYSTEM_INSTRUCTION = `You are "Anya", a friendly, empathetic support specialist for "Ishikawa Solutions".
+Your goal is to help potential clients explore their project ideas and guide them toward booking a consultation.
 
-COMPANY INFO:
-Ishikawa Solutions is a digital agency building amazing products.
-- Website Development (React, WordPress)
-- Custom Software (Bespoke solutions, SaaS)
-- Mobile Apps (iOS/Android)
-- E-commerce (Shopify, Stripe/Razorpay integrations)
+// ... (rest of usage) ...
+Company: Ishikawa Solutions - A professional web development and digital marketing agency.
 
-BELIEFS: Honesty, hard work, and delivering more than expected.
-TECH STACK: React Js, Node, Figma, Google Analytics, Vite.
+Tone: Professional, cheerful, human-like, and helpful. Use emojis occasionally (✨, 👋, 🚀, 💡).
 
-RULES:
-1. Answer questions based ONLY on the info above.
-2. Keep answers short (max 2-3 sentences).
-3. Do not say "As an AI". Speak as "We" or "I".
-4. LEAD GEN GOAL: If the user asks about pricing, specific services, or "how to start", politely ask for their email address to send a proposal.
-`;
+STRATEGY (CRITICAL):
+1. **LEAD CAPTURE Priority**: If a user seems interested or asks how to contact, **IMMEDIATELY ask for their Email Address or Phone Number** directly in the chat.
+   - Example: "That sounds great! What's the best email to reach you at? I can have our team send you a proposal right away."
+   - Do NOT just send them to the contact form link. Try to get the info HERE first.
+2. Greet the user warmly.
+3. Keep answers concise (2-3 sentences).
+4. Use **bolding** for key terms to make it easier to read.
+5. If they refuse to give info, THEN suggest the contact form.
 
-// --- TYPES ---
-interface ChatMessage {
-  id: number;
-  sender: 'user' | 'ai' | 'system' | 'debug';
-  text: string;
-  isError?: boolean;
+**PRICING POLICY (STRICT):**
+- **NEVER give specific prices or ranges.**
+- If asked about cost/price, say: "We create custom solutions tailored to your needs. To give you an accurate quote, could you share your **Email Address** or **Phone Number**? I'll have our team send you a proposal!"
+- **Goal**: Get their contact info so the regex capture can work.
+
+Important: Always be helpful and never pushy, but *always* try to get a contact method so we can follow up.`;
+
+// ... (rest of the file until render)
+
+
+
+const SUGGESTED_QUESTIONS = [
+  "What services do you offer?",
+  "How much does a website cost?",
+  "Do you develop mobile apps?",
+  "I need a custom software solution",
+  "Book a consultation"
+];
+
+/* ------------------------------------------------------------------
+  TYPES
+------------------------------------------------------------------ */
+
+interface Message {
+  id: string;
+  role: "user" | "model";
+  content: string;
+  timestamp: Date;
 }
 
-const AIChatbot: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+/* ------------------------------------------------------------------
+  GEMINI API INTEGRATION
+------------------------------------------------------------------ */
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+const sendMessageToGemini = async (
+  conversationHistory: Message[],
+  newMessage: string,
+  onChunk: (text: string) => void
+): Promise<void> => {
+  // Prepare history (excluding welcome message)
+  const historyParts = conversationHistory
+    .filter(msg => msg.id !== "welcome")
+    .map(msg => ({
+      role: msg.role === "model" ? "model" : "user",
+      parts: [{ text: msg.content }]
+    }));
+
+  const contents = [
+    ...historyParts,
+    {
+      role: "user",
+      parts: [{ text: newMessage }]
+    }
+  ];
+
+  const response = await fetch(`${API_ENDPOINT}?key=${API_KEY}&alt=sse`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      contents,
+      systemInstruction: {
+        parts: [{ text: SYSTEM_INSTRUCTION }]
+      },
+      generationConfig: {
+        maxOutputTokens: 350,
+        temperature: 0.7,
+      }
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status}`);
+  }
+
+  const reader = response.body?.getReader();
+  const decoder = new TextDecoder();
+
+  if (!reader) throw new Error("No reader available");
+
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+
+    for (const line of lines) {
+      if (line.startsWith("data: ")) {
+        const jsonStr = line.slice(6);
+        if (jsonStr.trim() === "[DONE]") continue;
+
+        try {
+          const data = JSON.parse(jsonStr);
+          const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) {
+            onChunk(text);
+          }
+        } catch (e) {
+          console.error("Parse error:", e);
+        }
+      }
+    }
+  }
+};
+
+/* ------------------------------------------------------------------
+  COMPONENT
+------------------------------------------------------------------ */
+
+interface AIChatbotProps {
+  avatarUrl?: string;
+  botName?: string;
+}
+
+const AIChatbot: React.FC<AIChatbotProps> = ({
+  avatarUrl = "/896.jpg",
+  botName = "Anya"
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [showGreeting, setShowGreeting] = useState(true);
+
+  const endRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  /* Auto Scroll */
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isTyping, isOpen]);
+
+  /* Focus Input on Open */
+  useEffect(() => {
+    if (isOpen) {
+      setShowGreeting(false);
+      setTimeout(() => inputRef.current?.focus(), 300);
+    }
+  }, [isOpen]);
+
+  /* Init Chat */
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([
+        {
+          id: "welcome",
+          role: "model",
+          content: `Hi there! 👋 I'm ${botName} from Ishikawa Solutions.\nI'm here to help you build something amazing. What are you looking to create today?`,
+          timestamp: new Date(),
+        },
+      ]);
+    }
+  }, [botName, messages.length]);
+
+  /* Check for Contact Info & Auto-Capture */
+  const checkForContactInfo = async (text: string) => {
+    // Simple Regex for Email and Phone
+    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/;
+    const phoneRegex = /\b\d{3}[-.]?\d{3}[-.]?\d{4}\b/; // Basic US pattern, can be improved
+
+    const emailMatch = text.match(emailRegex);
+    const phoneMatch = text.match(phoneRegex);
+
+    if (emailMatch || phoneMatch) {
+      const capturedEmail = emailMatch ? emailMatch[0] : "";
+      const capturedPhone = phoneMatch ? phoneMatch[0] : "";
+
+      // Prevent duplicate capture if already captured recently?
+      // For now, we'll just submit every time we see it to update potential info
+
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+      const utmSource = sessionStorage.getItem('utm_source') || 'direct';
+      const utmMedium = sessionStorage.getItem('utm_medium');
+      const utmCampaign = sessionStorage.getItem('utm_campaign');
+
+      try {
+        await fetch(`${API_URL}/contact`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: capturedEmail,
+            phone: capturedPhone,
+            message: `[Chatbot Capture]: ${text}`,
+            source: 'chatbot',
+            status: 'New', // Default status
+            utm_source: utmSource,
+            utm_medium: utmMedium,
+            utm_campaign: utmCampaign
+          })
+        });
+
+        // Optional: Maybe trigger a small UI indication? Not necessary for now as it's background "magic"
+        console.log("Lead captured from chat!");
+      } catch (err) {
+        console.error("Failed to capture lead from chat", err);
+      }
+    }
   };
 
-  useEffect(scrollToBottom, [messages, isLoading]);
+  /* Send Message */
+  const handleSend = async (text: string = inputValue) => {
+    if (!text.trim() || isTyping) return;
 
-  useEffect(() => {
-    setMessages([
-      { 
-        id: 1, 
-        sender: 'ai', 
-        text: 'Hi there! I\'m Srikhar from Ishikawa Solutions. How can I help you grow your business today?' 
-      },
+    const userText = text.trim();
+    setInputValue("");
+
+    // Auto-capture lead info
+    checkForContactInfo(userText); // Run in background
+
+    const userMsg: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: userText,
+      timestamp: new Date(),
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setIsTyping(true);
+
+    // Placeholder for bot message
+    const botMsgId = (Date.now() + 1).toString();
+    setMessages((prev) => [
+      ...prev,
+      { id: botMsgId, role: "model", content: "", timestamp: new Date() },
     ]);
-  }, []);
 
-  const handleSend = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
 
-    // FIX: Removed the logic that was blocking your real API key
-    if (!API_KEY || API_KEY.includes("YOUR_NEW_API_KEY")) {
-      setMessages(prev => [...prev, {
-        id: Date.now(),
-        sender: "system",
-        text: "⚠ Missing API Key. Please add your key."
-      }]);
-      return;
-    }
-
-    const userText = input;
-    setMessages(prev => [...prev, {
-      id: Date.now(),
-      sender: "user",
-      text: userText
-    }]);
-
-    setInput("");
-    setIsLoading(true);
+    // Track chatbot interaction immediately
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    fetch(`${API_URL}/analytics`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'chatbot_interaction',
+        page: window.location.pathname
+      })
+    }).catch(err => console.error('Analytics error:', err));
 
     try {
-      const genAI = new GoogleGenerativeAI(API_KEY);
-      
-      // FIX: Strictly use the standard Flash model. 
-      // If this fails with 404, it guarantees the API is OFF, not a model issue.
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      let fullText = "";
 
-      const chatHistory = messages
-        .filter(m => m.sender !== "system" && m.sender !== "debug")
-        .map(m => `${m.sender === "user" ? "User" : "Srikhar"}: ${m.text}`)
-        .join("\n");
-
-      const prompt = `${ISHIKAWA_KNOWLEDGE_BASE}
-
-PREVIOUS CHAT:${chatHistory}
-
-USER: ${userText}
-SRIKHAR:
-      `;
-
-      const result = await model.generateContent(prompt);
-      const aiResponse = result.response.text();
-
-      setMessages(prev => [...prev, {
-        id: Date.now(),
-        sender: "ai",
-        text: aiResponse
-      }]);
+      await sendMessageToGemini(
+        messages,
+        userText,
+        (chunk: string) => {
+          fullText += chunk;
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === botMsgId ? { ...m, content: fullText } : m
+            )
+          );
+        }
+      );
 
     } catch (error: any) {
-      console.error("Gemini Fatal Error:", error.message);
-      
-      let friendlyError = "Something went wrong. Please try again.";
-      let technicalDetail = error.message;
+      console.error("Chat error:", error);
 
-      // --- SMART ERROR DIAGNOSIS ---
-      if (error.message.includes("404") || error.message.includes("not found")) {
-        friendlyError = "API NOT ENABLED: Your API Key is valid, but the 'Generative Language API' service is turned OFF in Google Cloud.";
-        technicalDetail = "Action Required: Enable the API for your project.";
-      } else if (error.message.includes("403") || error.message.includes("key")) {
-        friendlyError = "INVALID KEY: Google rejected this API key.";
-      } else if (error.message.includes("503") || error.message.includes("overloaded")) {
-        friendlyError = "Google Servers are busy. Please try again in 5 seconds.";
+      let errorMessage = "⚠️ Sorry, I'm having trouble connecting. Please try again.";
+
+      if (error.message?.includes('API_KEY') || error.message?.includes('401') || error.message?.includes('403')) {
+        errorMessage = "⚠️ I'm undergoing a quick system update. Please contact us via the form instead!";
+      } else if (error.message?.includes('quota') || error.message?.includes('429')) {
+        errorMessage = "⚠️ I'm a bit overwhelmed right now. Please try again in a minute.";
       }
 
-      setMessages(prev => [
-        ...prev,
-        {
-          id: Date.now(),
-          sender: "system",
-          text: friendlyError,
-          isError: true
-        }
-      ]);
-
-      // If it's the 404 "API Not Enabled" error, show a direct link
-      if (error.message.includes("404")) {
-         setMessages(prev => [
-            ...prev,
-            {
-               id: Date.now() + 1,
-               sender: 'debug',
-               text: "Click here to fix: https://console.cloud.google.com/apis/library/generativelanguage.googleapis.com"
-            }
-         ]);
-      }
-
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === botMsgId ? { ...m, content: errorMessage } : m
+        )
+      );
     } finally {
-      setIsLoading(false);
+      setIsTyping(false);
     }
   };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const handleRefresh = () => {
+    setMessages([
+      {
+        id: "welcome-" + Date.now(),
+        role: "model",
+        content: `Hi there! 👋 I'm ${botName} from Ishikawa Solutions.\nI'm here to help you build something amazing. What are you looking to create today?`,
+        timestamp: new Date(),
+      },
+    ]);
+  };
+
+  /* ------------------------------------------------------------------
+    UI RENDER
+  ------------------------------------------------------------------ */
 
   return (
     <>
-      {/* Floating Trigger Button */}
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
-        >
-          <MessageSquare size={28} />
-        </button>
-      )}
+      <style>{`
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            @keyframes fadeInScale {
+                from { opacity: 0; transform: scale(0.95) translateY(10px); }
+                to { opacity: 1; transform: scale(1) translateY(0); }
+            }
+            .animate-message {
+                animation: fadeInScale 0.3s ease-out forwards;
+            }
+        `}</style>
 
+      {/* --- TRIGGER BUTTON --- */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+        {/* Greeting Bubble */}
+        {!isOpen && showGreeting && (
+          <div className="bg-white px-4 py-2.5 rounded-2xl rounded-br-none shadow-lg border border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-500 mb-2 max-w-[200px]">
+            <p className="text-sm font-medium text-gray-700">👋 Need help exploring ideas?</p>
+          </div>
+        )}
+
+        {/* FAB */}
+        {!isOpen && (
+          <button
+            onClick={() => setIsOpen(true)}
+            className="group relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] rounded-full shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 ring-4 ring-white/50"
+            aria-label="Open chat"
+          >
+            <div className="absolute inset-0 rounded-full bg-white/20 animate-ping opacity-20 duration-1000"></div>
+            <MessageSquare className="w-7 h-7 text-white fill-current" />
+            {/* Status Dot */}
+            <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+          </button>
+        )}
+      </div>
+
+      {/* --- CHAT WINDOW --- */}
       {isOpen && (
-        <div className="fixed bottom-6 right-4 z-50 w-[350px] md:w-[380px] h-[600px] bg-gradient-to-b from-purple-50 via-white to-pink-50 rounded-[30px] shadow-2xl flex flex-col font-sans border border-white/50 backdrop-blur-sm animate-slide-in overflow-hidden ring-1 ring-black/5">
-          
+        <div className="fixed bottom-6 right-6 z-50 w-[90vw] md:w-[400px] h-[550px] md:h-[650px] max-h-[85vh] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-gray-100 animate-in slide-in-from-bottom-10 fade-in duration-300 font-sans">
+
           {/* Header */}
-          <div className="flex justify-between items-center p-6 bg-white/60 backdrop-blur-md border-b border-white/50">
-            <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-200">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+          <div className="relative bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] p-6 flex justify-between items-start shrink-0 overflow-hidden">
+            {/* Decorative Circles - Added pointer-events-none */}
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="relative">
+                <div className="w-12 h-12 rounded-full border-2 border-white/30 p-0.5">
+                  <img
+                    src={avatarUrl}
+                    className="w-full h-full rounded-full object-cover bg-white"
+                    alt={botName}
+                  />
                 </div>
-                <div>
-                    <h3 className="text-lg font-bold text-gray-800 leading-tight">Ishikawa AI</h3>
-                    <p className="text-xs text-gray-500 font-medium">Digital chatbot interface</p>
-                </div>
+                <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-400 border-2 border-white rounded-full animate-pulse"></div>
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-lg flex items-center gap-2">
+                  {botName}  <Sparkles size={14} className="text-yellow-300" />
+                </h3>
+                <p className="text-white/90 text-xs font-medium opacity-90">Online • Typically replies instantly</p>
+              </div>
             </div>
-            <button 
-                onClick={() => setIsOpen(false)} 
-                className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors shadow-md"
-            >
-              <X size={16} />
-            </button>
+
+            <div className="flex gap-2 relative z-20">
+              <button
+                onClick={handleRefresh}
+                className="text-white/80 hover:text-white hover:bg-white/20 p-2 rounded-xl transition-all"
+                title="Restart Chat"
+              >
+                <RefreshCw size={18} />
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-white/80 hover:text-white hover:bg-white/20 p-2 rounded-xl transition-all"
+              >
+                <X size={20} />
+              </button>
+            </div>
           </div>
 
           {/* Messages Area */}
-          <div className="flex-grow p-4 overflow-y-auto space-y-6 custom-scrollbar">
-            {messages.map((message) => (
-              <div key={message.id} className={`flex w-full ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm text-[15px] leading-relaxed relative ${
-                    message.sender === 'user' 
-                      ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-none shadow-blue-200' 
-                      : message.sender === 'system' 
-                      ? 'bg-red-50 text-red-600 border border-red-100 font-medium'
-                      : message.sender === 'debug'
-                      ? 'bg-gray-900 text-blue-400 font-mono text-xs p-3 break-all cursor-pointer hover:bg-black' 
-                      : 'bg-white text-gray-700 rounded-tl-none shadow-gray-200 border border-white'
-                  }`}>
-                  {message.sender === 'system' && <AlertCircle size={16} className="mb-2" />}
-                  {message.sender === 'debug' && <ExternalLink size={14} className="mb-1 inline mr-2" />}
-                  {message.text}
+          <div className="flex-1 p-4 overflow-y-auto bg-gray-50/50 space-y-4">
+            {/* Time Label */}
+            <div className="text-center">
+              <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Today</span>
+            </div>
+
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`flex gap-3 animate-message ${msg.role === "user" ? "flex-row-reverse" : "flex-row"
+                  }`}
+              >
+                {/* Avatar Tiny */}
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'model' ? 'bg-purple-100 text-purple-600' : 'bg-gray-200 text-gray-600'}`}>
+                  {msg.role === 'model' ? <Bot size={16} /> : <User size={16} />}
+                </div>
+
+                <div
+                  className={`max-w-[80%] px-5 py-3.5 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === "user"
+                    ? "bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] text-white rounded-tr-none"
+                    : "bg-white text-gray-700 border border-gray-100 rounded-tl-none"
+                    }`}
+                >
+                  {msg.role === 'user' ? (
+                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                  ) : (
+                    <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-strong:text-purple-700 prose-ul:list-disc prose-ul:pl-4">
+                      <ReactMarkdown>
+                        {msg.content}
+                      </ReactMarkdown>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
-            {isLoading && (
-              <div className="flex justify-start w-full">
-                <div className="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-white">
-                  <div className="flex space-x-2">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                  </div>
+
+            {isTyping && (
+              <div className="flex gap-3 animate-message">
+                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center shrink-0 text-purple-600">
+                  <Bot size={16} />
+                </div>
+                <div className="bg-white border border-gray-100 rounded-2xl rounded-tl-none px-4 py-4 shadow-sm flex items-center gap-1.5 w-fit">
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             )}
-            <div ref={messagesEndRef} />
+
+            <div ref={endRef} />
           </div>
 
-          {/* Input Area */}
-          <div className="p-4 bg-white/60 backdrop-blur-md">
-             <div className="flex items-center gap-3">
-                {/* Plus Button */}
-                <button className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-50 shadow-sm transition-all">
-                    <Plus size={20} />
+          {/* Suggested Questions (Horizontal Scroll) */}
+          {!isTyping && (
+            <div className="px-4 py-3 bg-white border-t border-gray-100 overflow-x-auto whitespace-nowrap scrollbar-hide flex gap-2">
+              {SUGGESTED_QUESTIONS.map((q, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleSend(q)}
+                  className="inline-flex items-center px-3 py-1.5 rounded-full border border-purple-100 bg-purple-50 text-purple-600 text-xs font-medium hover:bg-purple-100 hover:border-purple-200 transition-colors"
+                >
+                  {q}
                 </button>
+              ))}
+            </div>
+          )}
 
-                {/* Input Field */}
-                <form onSubmit={handleSend} className="flex-grow relative">
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Chat here..."
-                        className="w-full h-12 pl-5 pr-12 bg-white rounded-full text-gray-700 placeholder-gray-400 outline-none shadow-sm border border-transparent focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
-                        disabled={isLoading}
-                    />
-                    
-                    {/* Send / Mic Button */}
-                    <div className="absolute right-1 top-1 flex items-center gap-1">
-                        {!input.trim() ? (
-                            <button type="button" className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600">
-                                <Mic size={20} />
-                            </button>
-                        ) : (
-                            <button
-                                type="submit"
-                                className="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white hover:bg-gray-800 transition-all shadow-md transform hover:scale-105"
-                                disabled={isLoading}
-                            >
-                                <Send size={18} className="ml-0.5" />
-                            </button>
-                        )}
-                    </div>
-                </form>
-             </div>
+          {/* Input Area */}
+          <div className="p-4 bg-white border-t border-gray-100 flex gap-2 items-end">
+            <input
+              ref={inputRef}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyPress={handleKeyPress}
+              className="flex-1 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white transition-all resize-none"
+              placeholder="Ask anything..."
+              disabled={isTyping}
+            />
+            <button
+              onClick={() => handleSend()}
+              disabled={!inputValue.trim() || isTyping}
+              className="p-3 rounded-xl bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] text-white shadow-lg shadow-purple-200 hover:shadow-purple-300 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none transition-all flex items-center justify-center"
+            >
+              <Send size={18} className={inputValue.trim() ? "translate-x-0.5" : ""} />
+            </button>
           </div>
 
         </div>
       )}
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        .animate-slide-in { animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes slideIn { from { transform: translateY(50px) scale(0.95); opacity: 0; } to { transform: translateY(0) scale(1); opacity: 1; } }
-      `}</style>
     </>
   );
 };

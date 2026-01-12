@@ -35,14 +35,14 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, ans
 
     return (
         // Individual "Pill" Container
-        <div 
+        <div
             className={`mb-4 rounded-2xl border transition-all duration-300 overflow-hidden
-            ${isOpen 
-                ? 'bg-pink-100 border-pink-200 shadow-sm' // Active State
-                : 'bg-white/30 border-pink-100/50 hover:bg-white/50' // Inactive State
-            }`}
+            ${isOpen
+                    ? 'bg-pink-100 border-pink-200 shadow-sm' // Active State
+                    : 'bg-white/30 border-pink-100/50 hover:bg-white/50' // Inactive State
+                }`}
         >
-            <button 
+            <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="w-full px-6 py-5 flex justify-between items-center text-left focus:outline-none"
             >
@@ -50,12 +50,12 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, ans
                     {question}
                 </span>
                 <div className={`text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-                     <ChevronDown size={20} />
+                    <ChevronDown size={20} />
                 </div>
             </button>
-            
+
             {/* Accordion Content */}
-            <div 
+            <div
                 className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}
             >
                 <p className="px-6 pb-6 text-[#666] font-urbanist leading-relaxed text-[15px]">
@@ -68,39 +68,39 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, ans
 
 // --- MAIN SECTION ---
 const FAQ: React.FC = () => {
-  return (
-    <section className="py-20 lg:py-24 bg-[#FBD3DE] w-full flex justify-center relative overflow-hidden">
-      
-      {/* Load Font */}
-      <style>{`
+    return (
+        <section className="py-20 lg:py-24 bg-[#FBD3DE] w-full flex justify-center relative overflow-hidden">
+
+            {/* Load Font */}
+            <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
         .font-urbanist { font-family: 'Urbanist', sans-serif; }
       `}</style>
 
-      <div className="container mx-auto px-4 max-w-7xl grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
-        
-        {/* LEFT COL: Questions List */}
-        <div className="order-2 lg:order-1">
-            {FAQS.map((faq, idx) => (
-                <FAQItem key={idx} {...faq} />
-            ))}
-        </div>
+            <div className="container mx-auto px-4 max-w-7xl grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
 
-        {/* RIGHT COL: 3D Illustration */}
-        <div className="order-1 lg:order-2 flex justify-center items-center">
-            {/* Using a placeholder 3D image. 
+                {/* LEFT COL: Questions List */}
+                <div className="order-2 lg:order-1">
+                    {FAQS.map((faq, idx) => (
+                        <FAQItem key={idx} {...faq} />
+                    ))}
+                </div>
+
+                {/* RIGHT COL: 3D Illustration */}
+                <div className="order-1 lg:order-2 flex justify-center items-center">
+                    {/* Using a placeholder 3D image. 
                 Replace 'src' with your local image path: "/images/your-3d-guy.png" 
             */}
-            <img 
-                src="\Untitled design 1 (1).png" 
-                alt="FAQ Illustration" 
-                className="w-[300px] md:w-[450px] object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500" 
-            />
-        </div>
+                    <img
+                        src="\footer.webp"
+                        alt="FAQ Illustration"
+                        className="w-[300px] md:w-[450px] object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+                    />
+                </div>
 
-      </div>
-    </section>
-  );
+            </div>
+        </section>
+    );
 };
 
 export default FAQ;

@@ -1,60 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ishikawa Solutions</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <style>
-      body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #fdfdfd;
-        overflow-x: hidden;
-      }
-      h1, h2, h3, h4, h5, h6 {
-        font-family: 'Outfit', sans-serif;
-      }
-      
-      /* Lenis Recommended CSS */
-      html.lenis, html.lenis body {
-        height: auto;
-      }
-      .lenis.lenis-smooth {
-        scroll-behavior: auto !important;
-      }
-      .lenis.lenis-smooth [data-lenis-prevent] {
-        overscroll-behavior: contain;
-      }
-      .lenis.lenis-stopped {
-        overflow: hidden;
-      }
-      .lenis.lenis-scrolling iframe {
-        pointer-events: none;
-      }
 
-      /* Custom Scrollbar */
-      ::-webkit-scrollbar {
-        width: 8px;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary Meta Tags -->
+  <title>Ishikawa Solutions - Web Development & Digital Marketing Agency</title>
+  <meta name="title" content="Ishikawa Solutions - Web Development & Digital Marketing Agency" />
+  <meta name="description"
+    content="Professional web development, mobile apps, and digital marketing services. Transform your business with custom software solutions. Get a free quote today!" />
+  <meta name="keywords"
+    content="web development, mobile app development, digital marketing, custom software, web design, e-commerce, SaaS development, Ishikawa Solutions" />
+  <meta name="author" content="Ishikawa Solutions" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="English" />
+  <meta name="revisit-after" content="7 days" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ishikawasolutions.com/" />
+  <meta property="og:title" content="Ishikawa Solutions - Web Development & Digital Marketing Agency" />
+  <meta property="og:description"
+    content="Professional web development, mobile apps, and digital marketing services. Transform your business with custom software solutions." />
+  <meta property="og:image" content="https://ishikawasolutions.com/og-image.jpg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://ishikawasolutions.com/" />
+  <meta property="twitter:title" content="Ishikawa Solutions - Web Development & Digital Marketing Agency" />
+  <meta property="twitter:description"
+    content="Professional web development, mobile apps, and digital marketing services. Transform your business with custom software solutions." />
+  <meta property="twitter:image" content="https://ishikawasolutions.com/og-image.jpg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/logo (1).png" />
+  <link rel="apple-touch-icon" href="/logo (1).png" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://ishikawasolutions.com/" />
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Ishikawa Solutions",
+      "url": "https://ishikawasolutions.com",
+      "logo": "https://ishikawasolutions.com/logo (1).png",
+      "description": "Professional web development, mobile apps, and digital marketing services",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "US"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "availableLanguage": "English"
+      },
+      "sameAs": [
+        "https://www.facebook.com/ishikawasolutions",
+        "https://www.linkedin.com/company/ishikawasolutions",
+        "https://twitter.com/ishikawasolutions"
+      ]
+    }
+    </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Ishikawa Solutions",
+      "url": "https://ishikawasolutions.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://ishikawasolutions.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
       }
-      ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-      }
-      .clip-path-blob {
-        clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
-      }
-    </style>
+    }
+    </script>
+
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-XXXXXXX');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- Google Ads Conversion Tracking -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-CONVERSION_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'AW-CONVERSION_ID', {
+      'send_page_view': true
+    });
+  </script>
+
+  <!-- Facebook Pixel -->
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ?
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    // fbq('init', 'YOUR_PIXEL_ID'); 
+    fbq('track', 'PageView');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #fdfdfd;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* Lenis Recommended CSS */
+    html.lenis,
+    html.lenis body {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
+    .lenis.lenis-scrolling iframe {
+      pointer-events: none;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .clip-path-blob {
+      clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -70,10 +200,64 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
-  <body>
-    <div id="root"></div>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- Facebook Pixel (noscript) -->
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1" /></noscript>
+  <!-- End Facebook Pixel (noscript) -->
+
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
+
+  <!-- Analytics Tracking Script -->
+  <script type="module">
+    // Track page views
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+    // Get UTM parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const utmSource = urlParams.get('utm_source');
+    const utmMedium = urlParams.get('utm_medium');
+    const utmCampaign = urlParams.get('utm_campaign');
+
+    // Track page view
+    fetch(`${API_URL}/analytics`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'page_view',
+        page: window.location.pathname,
+        utm_source: utmSource,
+        utm_medium: utmMedium,
+        utm_campaign: utmCampaign
+      })
+    }).catch(err => console.error('Analytics error:', err));
+
+    // Track scroll depth
+    window.addEventListener('scroll', () => {
+      const scrollPercent = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+      if (scrollPercent > maxScroll && scrollPercent % 25 === 0) {
+        maxScroll = scrollPercent;
+        fetch(`${API_URL}/analytics`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            event: 'scroll_depth',
+            page: window.location.pathname,
+            value: scrollPercent
+          })
+        }).catch(err => console.error('Analytics error:', err));
+      }
+    });
+  </script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" defer></script>
 </body>
+
 </html>
