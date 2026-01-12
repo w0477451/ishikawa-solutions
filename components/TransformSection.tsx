@@ -76,12 +76,11 @@ const TransformSection: React.FC = () => {
             >
               <div className="angigimate-float">
                 <img
-                  src="\about.webp"
+                  src="/about.webp"
                   alt="Dashboard Interface on Tablet"
+                  width="800"
+                  height="600"
                   className="w-full h-auto object-contain drop-shadow-2xl scale-110"
-                  onError={(e) => {
-                    e.currentTarget.src = "https://cdn.dribbble.com/users/1615584/screenshots/15967346/media/6d732e0467955e7c044031e3218f7f6c.jpg?resize=1000x750&vertical=center";
-                  }}
                 />
               </div>
             </div>

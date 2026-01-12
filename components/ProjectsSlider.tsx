@@ -151,8 +151,10 @@ const LandingPage: React.FC = () => {
             */}
             <div className="absolute bottom-0 right-0 lg:right-10 w-full lg:w-1/2 h-full flex items-end justify-center lg:justify-end pointer-events-none z-0 lg:z-20 opacity-40 lg:opacity-100">
               <img
-                src="\3d.webp"
+                src="/3d.webp"
                 alt="3D Character"
+                width="600"
+                height="800"
                 // 'h-[135%]' makes it taller than the blue box.
                 // 'object-bottom' ensures the feet stay at the bottom, so the head grows UPWARDS.
                 className="w-auto h-[60%] md:h-[80%] lg:h-[135%] max-w-none object-contain object-bottom animate-[float_6s_ease-in-out_infinite]"
