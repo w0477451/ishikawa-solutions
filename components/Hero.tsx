@@ -28,13 +28,12 @@ const Hero = () => {
         '-=0.8'
       );
 
-      // 3. Image pops in
+      // 3. Image Animation (LCP Optimized: Visible immediately, only subtle move)
       tl.from(imageRef.current, {
-        y: 50,
-        opacity: 0,
-        duration: 1.2,
-        scale: 0.9,
-      }, '-=2');
+        y: 30,
+        duration: 1,
+        ease: 'power3.out'
+      }, "-=0.8");
 
       // 4. Text elements stagger
       tl.from('.hero-anim', {
