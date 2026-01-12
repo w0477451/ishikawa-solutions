@@ -21,6 +21,13 @@ const AdminLogin = () => {
                 body: JSON.stringify({ username, password })
             });
 
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                const text = await response.text();
+                console.error("Non-JSON Response:", text);
+                throw new Error("Server configuration error (Backend not reachable). Check Vercel logs.");
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
@@ -31,7 +38,8 @@ const AdminLogin = () => {
             navigate('/admin/dashboard');
 
         } catch (err: any) {
-            setError(err.message);
+            console.error("Login Error:", err);
+            setError(err.message || "An unexpected error occurred");
         }
     };
 
