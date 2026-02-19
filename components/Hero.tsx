@@ -96,8 +96,7 @@ const Hero = () => {
           </div>
 
           <h1 ref={titleRef} className="hero-anim text-4xl lg:text-[3.8rem] leading-[1.2] lg:leading-[1.15] font-bold text-[#1a1a1a] mb-6">
-            We Always Deliver <br />
-            More Than Expected
+            "Exceeding expectations, <br> </br>delivered on time
           </h1>
 
           <p className="hero-anim text-base lg:text-lg text-gray-500 mb-8 lg:mb-10 leading-relaxed max-w-md">
