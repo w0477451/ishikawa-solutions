@@ -23,27 +23,31 @@ const AdminDashboard = React.lazy(() => import('./components/admin/AdminDashboar
 
 const LoadingFallback = () => <div className="py-20 text-center text-gray-400">Loading...</div>;
 
-const LandingPage = () => (
-  <SmoothScroll>
-    <main className="bg-white min-h-screen">
-      <Navbar />
-      <Hero />
-      <LogoMarquee />
+import { ConsultationModalProvider } from './components/ConsultationModal';
 
-      <Suspense fallback={<LoadingFallback />}>
-        <TransformSection />
-        <Services />
-        <Technologies />
-        <ProjectsSlider />
-        <Testimonials />
-        <Cards />
-        <CTA />
-        <FAQ />
-        <AIChatbot />
-        <Footer />
-      </Suspense>
-    </main>
-  </SmoothScroll>
+const LandingPage = () => (
+  <ConsultationModalProvider>
+    <SmoothScroll>
+      <main className="bg-white min-h-screen">
+        <Navbar />
+        <Hero />
+        <LogoMarquee />
+
+        <Suspense fallback={<LoadingFallback />}>
+          <TransformSection />
+          <Services />
+          <Technologies />
+          <ProjectsSlider />
+          <Testimonials />
+          <Cards />
+          <CTA />
+          <FAQ />
+          <AIChatbot />
+          <Footer />
+        </Suspense>
+      </main>
+    </SmoothScroll>
+  </ConsultationModalProvider>
 );
 
 function App() {

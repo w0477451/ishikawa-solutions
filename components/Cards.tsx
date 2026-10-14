@@ -2,10 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { useConsultationModal } from './ConsultationModal';
+
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
 const BeliefsAndStrength: React.FC = () => {
+  const { openModal } = useConsultationModal();
   const containerRef = useRef<HTMLDivElement>(null);
   const leftCardRef = useRef<HTMLDivElement>(null);
   const rightCardRef = useRef<HTMLDivElement>(null);
@@ -91,7 +94,10 @@ const BeliefsAndStrength: React.FC = () => {
               </p>
 
               {/* Button */}
-              <button className="bg-[#FF3366] hover:bg-[#E02250] text-white px-10 py-4 rounded-full font-urbanist font-bold text-base shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <button
+                onClick={() => openModal()}
+                className="bg-[#FF3366] hover:bg-[#E02250] text-white px-10 py-4 rounded-full font-urbanist font-bold text-base shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 cursor-pointer"
+              >
                 Know More
               </button>
             </div>
@@ -103,7 +109,7 @@ const BeliefsAndStrength: React.FC = () => {
                */}
               <img
                 ref={leftImageRef}
-                src="\swirls 1.png"
+                src="/swirls 1.png"
                 alt="Abstract Swirl"
                 className="w-full h-full object-cover object-bottom opacity-100 mix-blend-multiply mask-image-gradient"
                 style={{
@@ -138,7 +144,10 @@ const BeliefsAndStrength: React.FC = () => {
               </p>
 
               {/* Button */}
-              <button className="bg-[#0066FF] hover:bg-[#0052CC] text-white px-10 py-4 rounded-full font-urbanist font-bold text-base shadow-lg transition-all duration-300 hover:-translate-y-1">
+              <button
+                onClick={() => openModal()}
+                className="bg-[#0066FF] hover:bg-[#0052CC] text-white px-10 py-4 rounded-full font-urbanist font-bold text-base shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 cursor-pointer"
+              >
                 Know More
               </button>
             </div>

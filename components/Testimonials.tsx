@@ -130,7 +130,7 @@ const Testimonials: React.FC = () => {
   }, []);
 
   return (
-    <section ref={containerRef} className="py-16 lg:py-28 bg-white relative overflow-hidden font-sans flex flex-col items-center w-full">
+    <section id="testimonials" ref={containerRef} className="py-16 lg:py-28 bg-white relative overflow-hidden font-sans flex flex-col items-center w-full scroll-mt-20">
 
       {/* Load Urbanist Font */}
       <style>{`

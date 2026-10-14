@@ -83,11 +83,14 @@ const SERVICES_DATA = [
   },
 ];
 
+import { useConsultationModal } from './ConsultationModal';
+
 const Services: React.FC = () => {
   const [containerRef, isVisible] = useInView({ threshold: 0.1 });
+  const { openModal } = useConsultationModal();
 
   return (
-    <section className="py-20 bg-white flex justify-center items-center min-h-screen font-sans">
+    <section id="service" className="py-20 bg-white flex justify-center items-center min-h-screen font-sans scroll-mt-20">
       
       {/* --- YOUR CUSTOM CSS (Restored) --- */}
       <style>{`
@@ -211,6 +214,7 @@ const Services: React.FC = () => {
           {SERVICES_DATA.map((service, index) => (
             <div 
               key={service.id} 
+              onClick={() => openModal(service.title)}
               className={`svc-card svc-fade-up ${isVisible ? 'visible' : ''}`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
@@ -222,9 +226,16 @@ const Services: React.FC = () => {
               
               <p>{service.description}</p>
               
-              <a href="#" className="card-link">
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openModal(service.title);
+                }}
+                className="card-link bg-transparent border-none p-0 text-left"
+              >
                   View Details <ChevronRight size={16} />
-              </a>
+              </button>
             </div>
           ))}
         </div>

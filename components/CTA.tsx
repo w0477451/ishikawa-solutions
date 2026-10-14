@@ -201,12 +201,14 @@ const CTA: React.FC = () => {
                 className="w-full px-4 md:px-6 py-3 md:py-4 rounded-xl md:rounded-2xl border-none bg-gray-100 focus:ring-2 focus:ring-blue-300 outline-none text-sm md:text-base text-gray-700"
               >
                 <option value="">Service Interested in *</option>
-                <option value="Web Development">Web Development</option>
-                <option value="Mobile App Development">Mobile App Development</option>
-                <option value="Design">Design</option>
-                <option value="Digital Marketing">Digital Marketing</option>
-                <option value="Custom Software">Custom Software</option>
-                <option value="Other">Other</option>
+                <option value="Website Development Service">Website Development Service</option>
+                <option value="E-commerce Solutions Service">E-commerce Solutions Service</option>
+                <option value="Mobile App Development Service">Mobile App Development Service</option>
+                <option value="Custom Software Development Service">Custom Software Development Service</option>
+                <option value="UI/UX Design Service">UI/UX Design Service</option>
+                <option value="Integration & Automation Service">Integration & Automation Service</option>
+                <option value="Cloud Solutions & Hosting Service">Cloud Solutions & Hosting Service</option>
+                <option value="Maintenance & Support Service">Maintenance & Support Service</option>
               </select>
               <textarea
                 name="message"

@@ -69,7 +69,7 @@ const FAQItem: React.FC<{ question: string; answer: string }> = ({ question, ans
 // --- MAIN SECTION ---
 const FAQ: React.FC = () => {
     return (
-        <section className="py-20 lg:py-24 bg-[#FBD3DE] w-full flex justify-center relative overflow-hidden">
+        <section id="faq" className="py-20 lg:py-24 bg-[#FBD3DE] w-full flex justify-center relative overflow-hidden scroll-mt-20">
 
             {/* Load Font */}
             <style>{`

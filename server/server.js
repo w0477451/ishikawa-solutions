@@ -109,14 +109,34 @@ sequelize.sync({ alter: true })
   .catch(err => console.error('❌ Sync error:', err));
 
 
-// Email transporter
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+// Email configuration (Hostinger SMTP default, or custom)
+const RECIPIENT_EMAIL = process.env.ADMIN_EMAIL || 'business@ishikawasolutions.com';
+
+const createEmailTransporter = () => {
+  if (process.env.SMTP_SERVICE === 'gmail') {
+    return nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
   }
-});
+
+  // Hostinger / Custom SMTP (Hostinger: smtp.hostinger.com, port 465)
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.hostinger.com',
+    port: parseInt(process.env.SMTP_PORT || '465', 10),
+    secure: process.env.SMTP_SECURE !== 'false',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+};
 
 // Auth middleware
 const authenticateToken = (req, res, next) => {
@@ -134,15 +154,17 @@ const authenticateToken = (req, res, next) => {
 
 // ==================== PUBLIC ROUTES ====================
 
-// Submit CTA form
+// Submit Consultation / Contact form
 app.post('/api/contact', async (req, res) => {
   try {
-    const { name, email, phone, company, service, message, utm_source, utm_medium, utm_campaign } = req.body;
+    const { name, email, phone, company, service, message, utm_source, utm_medium, utm_campaign, source } = req.body;
 
-    // Flexible validation for Chatbot/Partial leads
+    // Flexible validation for leads
     if (!email && !phone) {
       return res.status(400).json({ error: 'At least Email or Phone is required' });
     }
+
+    const leadSource = source || 'website-form';
 
     const contact = await Contact.create({
       name: name || 'Anonymous User',
@@ -152,28 +174,101 @@ app.post('/api/contact', async (req, res) => {
       service: service || 'General Inquiry',
       message: message || '',
       utm_source: utm_source || 'direct',
-      utm_medium, utm_campaign,
-      source: 'chatbot' // or whatever source is passed
+      utm_medium,
+      utm_campaign,
+      source: leadSource
     });
 
     // Track analytics
     await Analytics.create({
       event: 'form_submit',
-      page: 'cta',
+      page: leadSource,
       userAgent: req.headers['user-agent'],
       ip: req.ip,
       referrer: req.headers.referer,
-      utm_source, utm_medium, utm_campaign
+      utm_source,
+      utm_medium,
+      utm_campaign
     });
 
-    // Email (optional)
+    // Send email notification to business@ishikawasolutions.com
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      // ... (skipping email logic for brevity, same as before)
+      try {
+        const transporter = createEmailTransporter();
+        const mailOptions = {
+          from: `"Ishikawa Solutions" <${process.env.EMAIL_USER}>`,
+          to: RECIPIENT_EMAIL,
+          replyTo: email || undefined,
+          subject: `✨ New Consultation Enquiry: ${name || 'Prospective Client'} - ${service || 'General'}`,
+          html: `
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 620px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);">
+              <div style="background: linear-gradient(135deg, #D03BF3 0%, #22D3EE 100%); padding: 28px 24px; text-align: center; color: #ffffff;">
+                <h1 style="margin: 0; font-size: 24px; font-weight: bold; letter-spacing: 0.5px;">New Consultation Request</h1>
+                <p style="margin: 8px 0 0 0; opacity: 0.95; font-size: 14px;">Ishikawa Solutions • Lead Notification</p>
+              </div>
+
+              <div style="padding: 28px 24px;">
+                <p style="font-size: 15px; color: #374151; margin-top: 0; line-height: 1.5;">
+                  You have received a new consultation enquiry through your website. Here are the client's details:
+                </p>
+
+                <table style="width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 14px;">
+                  <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 12px 0; font-weight: 600; color: #6b7280; width: 35%;">Client Name:</td>
+                    <td style="padding: 12px 0; color: #111827; font-weight: 600;">${name || 'Not provided'}</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 12px 0; font-weight: 600; color: #6b7280;">Email Address:</td>
+                    <td style="padding: 12px 0;"><a href="mailto:${email}" style="color: #2563eb; text-decoration: none; font-weight: 500;">${email || 'Not provided'}</a></td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 12px 0; font-weight: 600; color: #6b7280;">Phone Number:</td>
+                    <td style="padding: 12px 0;"><a href="tel:${phone}" style="color: #2563eb; text-decoration: none; font-weight: 500;">${phone || 'Not provided'}</a></td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 12px 0; font-weight: 600; color: #6b7280;">Company:</td>
+                    <td style="padding: 12px 0; color: #111827;">${company || 'Not provided'}</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 12px 0; font-weight: 600; color: #6b7280;">Service Selected:</td>
+                    <td style="padding: 12px 0; color: #c026d3; font-weight: bold;">${service || 'General Inquiry'}</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #f3f4f6;">
+                    <td style="padding: 12px 0; font-weight: 600; color: #6b7280;">Lead Source:</td>
+                    <td style="padding: 12px 0; color: #4b5563;">${leadSource}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 14px 0 6px 0; font-weight: 600; color: #6b7280; vertical-align: top;">Message:</td>
+                    <td style="padding: 14px 0 6px 0; color: #111827; line-height: 1.6;">${message ? message.replace(/\n/g, '<br/>') : '<em>No message provided</em>'}</td>
+                  </tr>
+                </table>
+
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center;">
+                  <a href="mailto:${email}?subject=Regarding%20your%20consultation%20with%20Ishikawa%20Solutions" style="display: inline-block; background: #2563eb; color: #ffffff; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 14px; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);">
+                    Reply to ${name || 'Client'}
+                  </a>
+                </div>
+              </div>
+
+              <div style="background-color: #f9fafb; padding: 16px 24px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #f3f4f6;">
+                Notification dispatched to <strong>${RECIPIENT_EMAIL}</strong> • Ishikawa Solutions System
+              </div>
+            </div>
+          `
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log(`✅ Enquiry email dispatched successfully to ${RECIPIENT_EMAIL}`);
+      } catch (mailError) {
+        console.error('⚠️ Nodemailer dispatch error (lead was safely stored in database):', mailError.message);
+      }
+    } else {
+      console.log(`ℹ️ Lead recorded in MySQL. To send live email notifications to ${RECIPIENT_EMAIL}, provide EMAIL_USER and EMAIL_PASS in server/.env`);
     }
 
     res.json({
       success: true,
-      message: 'Thank you! We will contact you soon.',
+      message: 'Thank you! We have received your enquiry and will contact you soon.',
       contactId: contact.id
     });
   } catch (error) {

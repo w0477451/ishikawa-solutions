@@ -2,9 +2,11 @@ import { Code, ShoppingBag, Megaphone, Layout, Smartphone, BarChart, Globe, Zap,
 import { Service, Testimonial, FaqItem, Project } from './types';
 
 export const NAV_ITEMS = [
-  { label: 'About Us', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Works', href: '#works' },
+  { label: 'Home', href: '#' },
+  { label: 'Services', href: '#service' },
+  { label: 'Portfolio', href: '#portfolio' },
+  { label: 'Testimonials', href: '#testimonials' },
+  { label: 'FAQ', href: '#faq' },
 ];
 
 export const SERVICES: Service[] = [

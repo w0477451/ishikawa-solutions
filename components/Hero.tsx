@@ -1,8 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ArrowRight } from 'lucide-react';
+import { useConsultationModal } from './ConsultationModal';
 
 const Hero = () => {
+  const { openModal } = useConsultationModal();
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -116,12 +118,18 @@ const Hero = () => {
           </ul>
 
           <div className="hero-anim flex flex-wrap items-center gap-4 lg:gap-5">
-            <button className="group relative px-6 lg:px-8 py-3 lg:py-3.5 rounded-full bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] text-white font-bold text-sm tracking-wide shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+            <button
+              onClick={() => openModal()}
+              className="group relative px-6 lg:px-8 py-3 lg:py-3.5 rounded-full bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] text-white font-bold text-sm tracking-wide shadow-lg transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+            >
               Get started
             </button>
-            <button className="px-6 lg:px-8 py-3 lg:py-3.5 rounded-full bg-white border border-[#D03BF3] text-[#D03BF3] font-bold text-sm tracking-wide hover:bg-[#D03BF3] hover:text-white transition-all duration-300">
+            <a
+              href="tel:+919901570724"
+              className="inline-flex items-center justify-center px-6 lg:px-8 py-3 lg:py-3.5 rounded-full bg-white border border-[#D03BF3] text-[#D03BF3] font-bold text-sm tracking-wide hover:bg-[#D03BF3] hover:text-white transition-all duration-300 shadow-sm"
+            >
               Schedule a Call
-            </button>
+            </a>
           </div>
         </div>
 

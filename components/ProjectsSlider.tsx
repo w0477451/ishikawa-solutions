@@ -1,36 +1,202 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from 'lucide-react';
+import { useConsultationModal } from './ConsultationModal';
 
 // Register GSAP
 gsap.registerPlugin(ScrollTrigger);
 
-// --- PROJECT DATA ---
+// --- 9 INDUSTRY PORTFOLIO DATA FROM LIVE SITE ---
 const PROJECTS = [
   {
     id: '01',
     industry: 'INDUSTRY TYPE',
-    name: 'PRODUCT NAME',
-    service: '(SERVICE)',
-    bgColor: 'bg-[#64FCDA]', // Green
-    imageAlt: 'Foldable Phone'
+    name: 'IT INDUSTRIES',
+    service: 'Custom Software & Cloud Solutions',
+    targetService: 'Custom Software Development Service',
+    bgColor: 'bg-[#E8F4FD]',
+    image: 'https://ishikawasolutions.in/wp-content/uploads/2025/11/IT-industries.png',
+    imageAlt: 'IT Industries'
   },
   {
     id: '02',
     industry: 'INDUSTRY TYPE',
-    name: 'PRODUCT NAME',
-    service: '(SERVICE)',
-    bgColor: 'bg-[#FFE4D6]', // Peach
-    imageAlt: 'Abstract Shape'
+    name: 'HEALTHCARE',
+    service: 'Patient Portals & Telehealth Apps',
+    targetService: 'Mobile App Development Service',
+    bgColor: 'bg-[#FFE4D6]',
+    image: 'https://ishikawasolutions.in/wp-content/uploads/2025/11/Healthcare.png',
+    imageAlt: 'Healthcare'
+  },
+  {
+    id: '03',
+    industry: 'INDUSTRY TYPE',
+    name: 'FINANCE & BANKING',
+    service: 'Fintech, Security & Payment Portals',
+    targetService: 'Custom Software Development Service',
+    bgColor: 'bg-[#CAE3FF]',
+    image: 'https://ishikawasolutions.in/wp-content/uploads/2025/11/Finance-and-Banking.png',
+    imageAlt: 'Finance & Banking'
+  },
+  {
+    id: '04',
+    industry: 'INDUSTRY TYPE',
+    name: 'EDUCATION',
+    service: 'LMS & Interactive Learning Platforms',
+    targetService: 'Website Development Service',
+    bgColor: 'bg-[#FFDFE5]',
+    image: 'https://ishikawasolutions.in/wp-content/uploads/2025/11/Education.png',
+    imageAlt: 'Education'
+  },
+  {
+    id: '05',
+    industry: 'INDUSTRY TYPE',
+    name: 'TRAVEL & HOSPITALITY',
+    service: 'Booking Engines & Experience Apps',
+    targetService: 'Website Development Service',
+    bgColor: 'bg-[#E3F2FD]',
+    image: 'https://ishikawasolutions.in/wp-content/uploads/2025/11/Travel-and-Hospitality.png',
+    imageAlt: 'Travel & Hospitality'
+  },
+  {
+    id: '06',
+    industry: 'INDUSTRY TYPE',
+    name: 'REAL ESTATE',
+    service: 'Property Showcases & CRM Solutions',
+    targetService: 'Website Development Service',
+    bgColor: 'bg-[#E8F5E9]',
+    image: 'https://ishikawasolutions.in/wp-content/uploads/2025/11/Real-Estate.png',
+    imageAlt: 'Real Estate'
+  },
+  {
+    id: '07',
+    industry: 'INDUSTRY TYPE',
+    name: 'TRANSPORTATION',
+    service: 'Fleet Tracking & Logistics Platforms',
+    targetService: 'Custom Software Development Service',
+    bgColor: 'bg-[#FFF3E0]',
+    image: 'https://ishikawasolutions.in/wp-content/uploads/2025/11/Transportation.png',
+    imageAlt: 'Transportation'
+  },
+  {
+    id: '08',
+    industry: 'INDUSTRY TYPE',
+    name: 'GAMING',
+    service: 'Interactive Web & Immersive UI/UX',
+    targetService: 'UI/UX Design Service',
+    bgColor: 'bg-[#F3E5F5]',
+    image: 'https://ishikawasolutions.in/wp-content/uploads/2025/11/Gaming.png',
+    imageAlt: 'Gaming'
+  },
+  {
+    id: '09',
+    industry: 'INDUSTRY TYPE',
+    name: 'RETAIL',
+    service: 'Omnichannel E-commerce & POS Systems',
+    targetService: 'E-commerce Solutions Service',
+    bgColor: 'bg-[#E0F2F1]',
+    image: 'https://ishikawasolutions.in/wp-content/uploads/2025/11/Retail.png',
+    imageAlt: 'Retail'
   }
 ];
 
-const LandingPage: React.FC = () => {
+const ProjectsSlider: React.FC = () => {
+  const { openModal } = useConsultationModal();
   const heroRef = useRef<HTMLDivElement>(null);
   const projectSectionRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
 
+  // --- CAROUSEL STATE ---
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleSlides, setVisibleSlides] = useState(3);
+  const [isHovered, setIsHovered] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+
+  // Calculate responsive visible slides
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setVisibleSlides(1);
+      } else if (window.innerWidth < 1024) {
+        setVisibleSlides(2);
+      } else {
+        setVisibleSlides(3);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const maxIndex = Math.max(0, PROJECTS.length - visibleSlides);
+
+  // Navigate with seamless wrap-around
+  const handlePrev = useCallback(() => {
+    setCurrentIndex(prev => (prev === 0 ? maxIndex : prev - 1));
+  }, [maxIndex]);
+
+  const handleNext = useCallback(() => {
+    setCurrentIndex(prev => (prev >= maxIndex ? 0 : prev + 1));
+  }, [maxIndex]);
+
+  // Autoplay (every 4.5 seconds, paused when hovering or dragging)
+  useEffect(() => {
+    if (isHovered || isDragging) return;
+    const interval = setInterval(() => {
+      handleNext();
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [handleNext, isHovered, isDragging]);
+
+  // Touch handlers for mobile swipe
+  const minSwipeDistance = 45;
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (distance > minSwipeDistance) {
+      handleNext();
+    } else if (distance < -minSwipeDistance) {
+      handlePrev();
+    }
+  };
+
+  // Mouse drag handlers
+  const onMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStartX(e.clientX);
+  };
+
+  const onMouseUp = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const diff = dragStartX - e.clientX;
+    if (diff > minSwipeDistance) {
+      handleNext();
+    } else if (diff < -minSwipeDistance) {
+      handlePrev();
+    }
+  };
+
+  const onMouseLeave = () => {
+    setIsDragging(false);
+    setIsHovered(false);
+  };
+
+
+  // GSAP Animations
   useEffect(() => {
     const ctx = gsap.context(() => {
       // 1. Hero Parallax
@@ -47,31 +213,15 @@ const LandingPage: React.FC = () => {
 
       // 2. Project Title Animation
       gsap.from(titleRef.current, {
-        y: 50,
+        y: 40,
         opacity: 0,
-        duration: 1,
+        duration: 0.9,
         ease: "power3.out",
         scrollTrigger: {
           trigger: projectSectionRef.current,
-          start: "top 60%",
+          start: "top 65%",
         }
       });
-
-      // 3. Cards Animation
-      const cards = cardsRef.current?.children;
-      if (cards) {
-        gsap.from(cards, {
-          y: 100,
-          opacity: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: cardsRef.current,
-            start: "top 70%",
-          }
-        });
-      }
     });
 
     return () => ctx.revert();
@@ -93,11 +243,9 @@ const LandingPage: React.FC = () => {
       {/* =========================================
           1. HERO SECTION (Blue Card)
       ========================================= */}
-      {/* Increased top padding (pt-20) to make room for the 3D Head popping out */}
       <div className="px-4 pt-20 pb-0 relative z-30">
         <div
           ref={heroRef}
-          // overflow-visible is CRITICAL for the head to show outside the box
           className="max-w-[95%] mx-auto bg-[#CFE5FF] rounded-[40px] md:rounded-[50px] min-h-[500px] lg:min-h-[650px] relative flex items-center overflow-visible"
         >
           {/* --- WAVE BACKGROUND GRAPHIC --- */}
@@ -131,32 +279,27 @@ const LandingPage: React.FC = () => {
           </div>
 
           <div className="container mx-auto px-6 lg:px-16 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center h-full relative z-10">
-
             {/* Left Content (Text & Button) */}
             <div className="flex flex-col items-start py-16 relative z-30">
               <span className="text-xs font-bold tracking-[0.2em] text-gray-500 mb-4 uppercase">Who we are</span>
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-[#3D3028] leading-[1.1] mb-8">
                 We are a digital agency that builds amazing products.
               </h1>
-              <button className="px-8 py-3 rounded-full border border-gray-400 text-gray-600 font-bold hover:bg-[#3D3028] hover:text-white hover:border-[#3D3028] transition-all duration-300 bg-white/30 backdrop-blur-sm">
+              <button
+                onClick={() => openModal()}
+                className="px-8 py-3 rounded-full border border-gray-400 text-gray-600 font-bold hover:bg-[#3D3028] hover:text-white hover:border-[#3D3028] transition-all duration-300 bg-white/30 backdrop-blur-sm cursor-pointer shadow-sm active:scale-95"
+              >
                 Get started
               </button>
             </div>
 
             {/* Right Image (3D Character) */}
-            {/* FIX: 
-                1. absolute positioning to bottom-right to keep it away from the button.
-                2. h-[135%] allows it to exceed the container height.
-                3. bottom-0 anchors the feet to the floor.
-            */}
             <div className="absolute bottom-0 right-0 lg:right-10 w-full lg:w-1/2 h-full flex items-end justify-center lg:justify-end pointer-events-none z-0 lg:z-20 opacity-40 lg:opacity-100">
               <img
                 src="/3d.webp"
                 alt="3D Character"
                 width="600"
                 height="800"
-                // 'h-[135%]' makes it taller than the blue box.
-                // 'object-bottom' ensures the feet stay at the bottom, so the head grows UPWARDS.
                 className="w-auto h-[60%] md:h-[80%] lg:h-[135%] max-w-none object-contain object-bottom animate-[float_6s_ease-in-out_infinite]"
               />
             </div>
@@ -165,11 +308,12 @@ const LandingPage: React.FC = () => {
       </div>
 
       {/* =========================================
-          2. PROJECTS SECTION (Pink Background)
+          2. PROJECTS SECTION (Interactive Carousel Slider)
       ========================================= */}
       <section
+        id="portfolio"
         ref={projectSectionRef}
-        className="relative z-10 w-full -mt-[150px] pt-[220px] pb-32 bg-[#FFC8D3]"
+        className="relative z-10 w-full -mt-[150px] pt-[220px] pb-32 bg-[#FFC8D3] scroll-mt-10 overflow-hidden select-none"
       >
         {/* Decorative Swoosh */}
         <div className="absolute top-[10%] right-0 w-[600px] h-[600px] pointer-events-none z-0 translate-x-1/3">
@@ -190,41 +334,160 @@ const LandingPage: React.FC = () => {
           </svg>
         </div>
 
-        <div className="container mx-auto px-4 relative z-10">
-          {/* Section Header */}
-          <div className="text-center max-w-4xl mx-auto mb-16 lg:mb-24">
-            <h2 ref={titleRef} className="text-4xl lg:text-6xl font-extrabold text-white leading-tight drop-shadow-sm">
-              Get a Glimpse of the <br />
-              Amazing Projects We <br />
-              Have Worked on
-            </h2>
+        <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-7xl">
+          {/* Section Header & Interactive Controls Bar */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 lg:mb-16">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-purple-900 text-xs font-extrabold uppercase tracking-widest mb-4">
+                <Sparkles size={14} className="text-[#D03BF3]" />
+                Our Portfolio & Case Studies
+              </div>
+              <h2 ref={titleRef} className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] drop-shadow-sm">
+                Get a Glimpse of the <br />
+                Amazing Projects We <br />
+                Have Worked on.
+              </h2>
+            </div>
+
+            {/* Navigation Arrows & Live Slide Badge */}
+            <div className="flex items-center gap-4 shrink-0">
+              {/* Slide Counter Badge */}
+              <div className="px-4 py-2 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-white font-extrabold text-sm tracking-wider shadow-sm">
+                <span className="text-purple-900 font-black">{String(currentIndex + 1).padStart(2, '0')}</span>
+                <span className="opacity-60 mx-1.5">/</span>
+                <span className="opacity-80">{String(PROJECTS.length).padStart(2, '0')}</span>
+              </div>
+
+              {/* Prev Button */}
+              <button
+                onClick={handlePrev}
+                aria-label="Previous Slide"
+                className="w-12 h-12 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg border border-white/80 hover:scale-105 active:scale-95 transition-all cursor-pointer backdrop-blur-md hover:text-[#D03BF3]"
+              >
+                <ChevronLeft size={22} />
+              </button>
+
+              {/* Next Button */}
+              <button
+                onClick={handleNext}
+                aria-label="Next Slide"
+                className="w-12 h-12 rounded-full bg-white/90 hover:bg-white text-gray-800 flex items-center justify-center shadow-lg border border-white/80 hover:scale-105 active:scale-95 transition-all cursor-pointer backdrop-blur-md hover:text-[#D03BF3]"
+              >
+                <ChevronRight size={22} />
+              </button>
+            </div>
           </div>
 
-          {/* Projects Grid */}
-          <div ref={cardsRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
-            {PROJECTS.map((project) => (
-              <div key={project.id} className="flex flex-col group cursor-pointer">
-                {/* Card */}
-                <div className={`relative w-full aspect-[4/3.5] rounded-[40px] overflow-hidden ${project.bgColor} shadow-xl transition-transform duration-500 hover:scale-[1.02]`}>
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className="text-center opacity-40 font-bold text-2xl tracking-widest">
-                      [ IMAGE PLACEHOLDER ]
+          {/* ==================== CAROUSEL SLIDER TRACK ==================== */}
+          <div
+            className="relative w-full overflow-hidden py-4 cursor-grab active:cursor-grabbing"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={onMouseLeave}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+          >
+            <div
+              className="flex transition-transform duration-700 ease-out will-change-transform"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / visibleSlides)}%)`
+              }}
+            >
+              {PROJECTS.map((project) => (
+                <div
+                  key={project.id}
+                  className="shrink-0 px-3 md:px-4"
+                  style={{ width: `${100 / visibleSlides}%` }}
+                >
+                  {/* --- High-End Glassmorphic Card --- */}
+                  <div
+                    onClick={() => openModal(project.targetService)}
+                    className="group relative bg-white/50 hover:bg-white/85 backdrop-blur-md rounded-[36px] p-5 md:p-6 shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:shadow-[0_24px_48px_rgba(208,59,243,0.22)] border border-white/80 transition-all duration-500 hover:-translate-y-2 cursor-pointer flex flex-col justify-between h-full"
+                  >
+                    {/* Visual Image Container */}
+                    <div className={`relative w-full aspect-[4/3.2] rounded-[26px] overflow-hidden ${project.bgColor} shadow-inner`}>
+                      <img
+                        src={project.image}
+                        alt={project.imageAlt}
+                        loading="lazy"
+                        draggable={false}
+                        className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-700 select-none"
+                      />
+
+                      {/* Top-Left ID & Category Pill */}
+                      <div className="absolute top-3.5 left-3.5 bg-black/45 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider border border-white/20 flex items-center gap-1.5 shadow-sm">
+                        <Sparkles size={11} className="text-pink-300" />
+                        <span>[{project.id}]</span>
+                      </div>
+
+                      {/* Top-Right 'Case Study' Pill */}
+                      <div className="absolute top-3.5 right-3.5 bg-white/85 backdrop-blur-md text-[#D03BF3] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider border border-white/60 shadow-sm">
+                        Case Study
+                      </div>
+
+                      {/* Hover Overlay with Action Button */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4">
+                        <span className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] text-white text-xs font-bold shadow-xl flex items-center gap-2 transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
+                          <span>View Details & Consult</span>
+                          <ArrowRight size={14} />
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Card Content & Details */}
+                    <div className="mt-5 flex items-end justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <span className="text-[11px] font-extrabold tracking-widest text-[#8B5CF6] uppercase block mb-1">
+                          {project.industry}
+                        </span>
+                        <h3 className="text-xl md:text-2xl font-black text-[#1F2937] tracking-tight uppercase leading-tight truncate group-hover:text-[#D03BF3] transition-colors">
+                          {project.name}
+                        </h3>
+                        <p className="text-xs font-medium text-gray-500 mt-1 truncate">
+                          {project.service}
+                        </p>
+                      </div>
+
+                      {/* Interactive Round Button Icon */}
+                      <div className="w-11 h-11 rounded-full bg-white group-hover:bg-gradient-to-tr group-hover:from-[#D03BF3] group-hover:to-[#22D3EE] text-gray-700 group-hover:text-white flex items-center justify-center shrink-0 shadow-md border border-gray-100 group-hover:border-transparent group-hover:scale-110 group-hover:rotate-45 transition-all duration-300">
+                        <ArrowRight size={18} />
+                      </div>
                     </div>
                   </div>
                 </div>
-                {/* Details */}
-                <div className="mt-6 flex justify-between items-end text-white px-2">
-                  <div className="flex flex-col gap-1">
-                    <span className="text-lg font-bold tracking-wider opacity-90 uppercase">{project.industry}</span>
-                    <span className="text-2xl font-extrabold tracking-wide uppercase">{project.name}</span>
-                  </div>
-                  <div className="flex items-center gap-8 mb-1">
-                    <span className="text-lg font-bold opacity-90 tracking-wider uppercase">{project.service}</span>
-                    <span className="text-lg font-bold opacity-90">[{project.id}]</span>
-                  </div>
-                </div>
-              </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ==================== INTERACTIVE PAGINATION DOTS ==================== */}
+          <div className="flex items-center justify-center gap-2.5 mt-8">
+            {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  currentIndex === idx
+                    ? 'w-10 h-3 bg-white shadow-md'
+                    : 'w-3 h-3 bg-white/40 hover:bg-white/70'
+                }`}
+              />
             ))}
+          </div>
+
+          {/* ==================== CONSULTATION / VIEW PORTFOLIO CTA ==================== */}
+          <div className="mt-14 text-center">
+            <button
+              onClick={() => openModal()}
+              className="inline-flex items-center gap-3 px-10 py-4 rounded-full bg-white text-[#D03BF3] font-bold text-base shadow-xl hover:shadow-2xl hover:bg-gray-50 transition-all transform hover:-translate-y-1 active:translate-y-0 cursor-pointer border border-white/60"
+            >
+              <span>View Portfolio & Free Consultation</span>
+              <svg className="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
           </div>
         </div>
       </section>
@@ -232,4 +495,4 @@ const LandingPage: React.FC = () => {
   );
 };
 
-export default LandingPage;
+export default ProjectsSlider;
