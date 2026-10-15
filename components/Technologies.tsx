@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
-// --- 1. BRAND ICONS ---
+// --- 1. AUTHENTIC OFFICIAL BRAND ICONS ---
 
 const FigmaLogo = () => (
   <svg viewBox="0 0 38 57" fill="none" className="w-12 h-12">
@@ -18,14 +18,14 @@ const FigmaLogo = () => (
 );
 
 const WordPressLogo = () => (
-  <svg viewBox="0 0 512 512" fill="none" className="w-16 h-16">
-    <path d="M256 0C114.6 0 0 114.6 0 256C0 397.4 114.6 512 256 512C397.4 512 512 397.4 512 256C512 114.6 397.4 0 256 0ZM62.6 265.6C62.6 182.6 112.2 110.8 183.3 80.1L69.7 395.5C65.2 353.8 62.6 310.9 62.6 265.6ZM434.2 162.4C455.2 191.8 466.9 229.3 466.9 260.4C466.9 354.5 408.7 436.8 325.6 475.1L434.2 162.4ZM238.5 122.9H300.8C308.3 122.9 314.3 125.6 314.3 132.3C314.3 138.3 314.3 138.3 306.4 142.4L265.9 168.9L321.8 338L396.9 141.3C403.2 125.9 407.7 122.9 415.6 122.9C425.7 122.9 433.2 130.4 433.2 140.5C433.2 148.1 432.5 149.2 428.7 158.8L363.9 341.4L300.8 384.3L267.4 220.3L174.3 479.8L127.7 343.6L218.5 86.2L283.1 276.9L240 142.4C232.1 138.7 226.5 136.5 226.5 132.3C226.5 124.8 228.4 122.9 238.5 122.9Z" fill="#21759B" />
-    <circle cx="256" cy="256" r="248" stroke="#21759B" strokeWidth="20" />
+  <svg viewBox="0 0 512 512" fill="none" className="w-14 h-14">
+    <circle cx="256" cy="256" r="256" fill="#21759B" />
+    <path d="M256 26.6C129.5 26.6 26.6 129.5 26.6 256c0 126.5 102.9 229.4 229.4 229.4 126.5 0 229.4-102.9 229.4-229.4 0-126.5-102.9-229.4-229.4-229.4zm-147.2 229.4c0-29.8 8.1-57.8 22.3-81.8l105 287.8c-76.3-24.7-127.3-96.2-127.3-176zm147.2 202.8c-24.7 0-48-5.3-69.1-14.7l69.1-200.7 70.8 194.2c-.6.4-1.2.8-1.8 1.2-20.9 13-44.2 20-69 20zm24.7-270.8l56.8 165.2c27.5-31.4 44-72.3 44-117.2 0-21.7-4.1-42.5-11.6-61.6l-89.2 13.6zm132.8-59.5c6.5 17.5 10.1 36.5 10.1 56.3 0 54.4-25.7 102.7-65.6 133.8L354.4 175c13.7-22.3 26.8-43.5 26.8-43.5s2.7-4.4 2.7-8.8c0-8.8-6.3-15.1-15.1-15.1-1.3 0-2.8.2-4.4.6l-58.8 8.9c-4.4.6-8.9 1.3-13.3 1.9-8.8 1.3-13.9 10.1-11.4 18.9 2.5 8.8 11.4 13.9 20.2 12.6l24.7-3.8-49.3 143.5-34.8-104.3 16.4-2.5c8.8-1.3 13.9-10.1 11.4-18.9-2.5-8.8-11.4-13.9-20.2-12.6l-57.5 8.8c-8.8 1.3-13.9 10.1-11.4 18.9 2.5 8.8 11.4 13.9 20.2 12.6l23.4-3.5 53.7 160.6L164 128.5l25.3-3.8c8.8-1.3 13.9-10.1 11.4-18.9-2.5-8.8-11.4-13.9-20.2-12.6l-67 10.2c40-39.7 94.6-64.2 154.9-64.2 46.2 0 88.8 14.3 123.9 38.6z" fill="#FFFFFF" />
   </svg>
 );
 
 const ReactLogo = () => (
-  <svg viewBox="-11.5 -10.23174 23 20.46348" className="w-16 h-16 animate-[spin_10s_linear_infinite]">
+  <svg viewBox="-11.5 -10.23174 23 20.46348" className="w-14 h-14 animate-[spin_12s_linear_infinite]">
     <circle cx="0" cy="0" r="2.05" fill="#61dafb" />
     <g stroke="#61dafb" strokeWidth="1" fill="none">
       <ellipse rx="11" ry="4.2" />
@@ -35,40 +35,41 @@ const ReactLogo = () => (
   </svg>
 );
 
+// Authentic Shopify Shopping Bag Logo
 const ShopifyLogo = () => (
-  <svg viewBox="0 0 24 24" className="w-14 h-14" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12.12 1.34L3.6 4.31L4.41 12.51C4.85 16.96 7.6 20.84 11.66 22.84L12.12 23.05L12.58 22.84C16.64 20.84 19.39 16.96 19.83 12.51L20.64 4.31L12.12 1.34Z" fill="#95BF47" />
-    <path d="M14.5 9.5C14.5 10.8807 13.3807 12 12 12C10.6193 12 9.5 10.8807 9.5 9.5C9.5 8.11929 10.6193 7 12 7C13.3807 7 14.5 8.11929 14.5 9.5Z" fill="#ffffff" />
+  <svg viewBox="0 0 109 124" className="w-13 h-13" fill="none">
+    <path d="M73.4 12.7c-.1-.7-.6-1.2-1.3-1.3l-14.8-1.5c-.3 0-.6.1-.8.3-.3.2-.4.5-.4.8l-4 76.5 35.8-7.7-14.5-67.1z" fill="#5E8E3E"/>
+    <path d="M52.1 11c-.3 0-.6.1-.8.3-.3.2-.4.5-.4.8L47 88.6l35.8-7.7-16.2-70.1c-.1-.7-.6-1.2-1.3-1.3l-13.2-.8v2.3z" fill="#95BF47"/>
+    <path d="M47 88.6l-18.7-3.9c-.8-.2-1.3-.9-1.2-1.7l11.4-53.7 8.5 59.3z" fill="#5E8E3E"/>
+    <path d="M38.5 29.3L15.3 34.2c-.7.1-1.2.8-1.1 1.5l14.1 66.2c.2.8.9 1.3 1.7 1.2l27-5.8-10-68z" fill="#95BF47"/>
+    <path d="M82.8 80.9L106 76c.7-.1 1.2-.8 1.1-1.5L93 8.3c-.2-.8-.9-1.3-1.7-1.2L64.3 12.9l18.5 68z" fill="#95BF47"/>
+    <path d="M60.9 2.5C53.6-1.4 44.5-.6 38.3 4.5c-4.4 3.6-6.8 8.9-6.5 14.5l1.1 18.7 19.8-4.2-1.1-18.7c-.2-4.1 1.5-7.9 4.6-10.4 4.3-3.5 10.4-4 15.3-1.3 2.9 1.6 5 4.3 5.9 7.5l16.1-3.4c-1.4-4.8-4.6-8.8-8.9-11.2l-3.7-3.5z" fill="#5E8E3E"/>
+    <path d="M66.4 53.6c-4.8-.9-9.1-1.9-9.1-5.1 0-2.8 2.3-4.6 6.1-4.6 4.3 0 7.8 1.8 10 3.1l3.5-7.7c-3-1.9-7.4-3.4-13.5-3.4-10.5 0-16.7 5.8-16.7 13.7 0 9.2 8.3 11.2 14.5 12.4 4.8.9 9.1 1.9 9.1 5.1 0 3-2.6 4.8-6.7 4.8-5.3 0-10.1-2.4-12.8-4.2l-3.7 7.9c3.7 2.5 9.7 4.3 16.5 4.3 11 0 17.3-5.9 17.3-14 0-9.5-8.4-11.4-14.7-12.3z" fill="#fff"/>
   </svg>
 );
 
+// Authentic Node.js Hexagon Logo
 const NodeLogo = () => (
-  <div className="flex items-center gap-2">
-    <span className="text-[#333] font-bold text-2xl tracking-tight">node</span>
-    <svg viewBox="0 0 128 128" fill="none" className="w-10 h-10">
-      <path d="M64 16L26 38V84L64 106L102 84V38L64 16Z" fill="#83CD29" />
-      <path d="M64 16L102 38V84L64 106" stroke="#333" strokeWidth="0" fill="none" />
-      <text x="30" y="90" fontFamily="sans-serif" fontSize="65" fontWeight="bold" fill="#333">JS</text>
-    </svg>
-  </div>
+  <svg viewBox="0 0 256 289" className="w-13 h-13" fill="none">
+    <path d="M128 0L256 73.9V215.1L128 289L0 215.1V73.9L128 0Z" fill="#339933"/>
+    <path d="M128 27.5L232.2 87.7V201.3L128 261.5L23.8 201.3V87.7L128 27.5Z" fill="#026E00"/>
+    <path d="M128 47.7L215.3 98.1V190.9L128 241.3L40.7 190.9V98.1L128 47.7Z" fill="#339933"/>
+    <path d="M106 182h18v-44.5c0-8.5 4-13.5 12.5-13.5s11.5 5 11.5 13.5V182h18v-47c0-16-9-25-24-25-11 0-17 5-20 11V95h-18v87z" fill="#FFFFFF"/>
+  </svg>
 );
 
+// Authentic Next.js Logo
 const NextLogo = () => (
-  <svg viewBox="0 0 180 180" fill="none" className="w-16 h-16">
-    <mask id="mask0_408_134" style={{ maskType: 'alpha' }} maskUnits="userSpaceOnUse" x="0" y="0" width="180" height="180">
-      <circle cx="90" cy="90" r="90" fill="black" />
-    </mask>
-    <g mask="url(#mask0_408_134)">
-      <circle cx="90" cy="90" r="90" fill="black" />
-      <path d="M149.508 157.52L69.142 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.165 149.508 157.52Z" fill="url(#paint0_linear_408_134)" />
-      <rect x="115" y="54" width="12" height="72" fill="url(#paint1_linear_408_134)" />
-    </g>
+  <svg viewBox="0 0 180 180" fill="none" className="w-13 h-13">
+    <circle cx="90" cy="90" r="90" fill="black" />
+    <path d="M149.508 157.52L69.142 54H54V125.97H66.1136V69.3836L139.999 164.845C143.333 162.614 146.509 160.165 149.508 157.52Z" fill="url(#next_grad_1)" />
+    <rect x="115" y="54" width="12" height="72" fill="url(#next_grad_2)" />
     <defs>
-      <linearGradient id="paint0_linear_408_134" x1="109" y1="116.5" x2="144.5" y2="160.5" gradientUnits="userSpaceOnUse">
+      <linearGradient id="next_grad_1" x1="109" y1="116.5" x2="144.5" y2="160.5" gradientUnits="userSpaceOnUse">
         <stop stopColor="white" />
         <stop offset="1" stopColor="white" stopOpacity="0" />
       </linearGradient>
-      <linearGradient id="paint1_linear_408_134" x1="121" y1="54" x2="120.791" y2="104.867" gradientUnits="userSpaceOnUse">
+      <linearGradient id="next_grad_2" x1="121" y1="54" x2="120.791" y2="104.867" gradientUnits="userSpaceOnUse">
         <stop stopColor="white" />
         <stop offset="1" stopColor="white" stopOpacity="0" />
       </linearGradient>
@@ -76,46 +77,50 @@ const NextLogo = () => (
   </svg>
 );
 
+// Authentic Python Logo
 const PythonLogo = () => (
-  <svg viewBox="0 0 256 255" className="w-16 h-16">
-    <path d="M126.916.004c-33.196.453-63.719 14.896-83.453 28.92C26.568 41.007 25.4 43.332 25.4 52.025v27.28h53.03l1.635-25.828c.232-3.67 1.673-6.703 11.996-7.866 7.745-.872 31.887-1.376 33.941 1.714 2.054 3.09 1.768 19.903 1.768 19.903l-74.405.793c-35.797.382-53.476 17.318-53.07 48.563l.572 31.366c.405 31.246 18.468 47.022 51.926 48.606h25.88v-32.48c0-23.51 13.758-39.137 39.36-40.02l57.542-.445V62.722c0-33.89-21.687-60.307-48.66-62.718zm16.206 19.953c5.17 0 9.365 4.21 9.365 9.403 0 5.192-4.194 9.403-9.365 9.403-5.17 0-9.366-4.21-9.366-9.403 0-5.193 4.196-9.403 9.366-9.403z" fill="#306998" />
-    <path d="M130.202 255.004c33.197-.453 63.72-14.897 83.454-28.922 16.896-12.082 18.063-14.407 18.063-23.1v-27.28h-53.03l-1.635 25.827c-.232 3.67-1.673 6.703-11.996 7.866-7.745.873-31.888 1.377-33.942-1.713-2.053-3.09-1.767-19.903-1.767-19.903l74.405-.792c35.798-.382 53.477-17.32 53.07-48.564l-.57-31.365c-.406-31.246-18.47-47.022-51.927-48.607h-25.88v32.48c0 23.51-13.76 39.137-39.36 40.02l-57.542.445v61.19c0 33.892 21.686 60.307 48.658 62.718zm-16.206-19.952c-5.17 0-9.365-4.212-9.365-9.405 0-5.193 4.195-9.404 9.365-9.404 5.17 0 9.367 4.21 9.367 9.404 0 5.193-4.2 9.405-9.367 9.405z" fill="#FFD43B" />
+  <svg viewBox="0 0 110 110" className="w-13 h-13">
+    <path d="M54.5 2C27.7 2 29.3 13.6 29.3 13.6l.03 12.1h25.4v3.6H19.2S2 27.3 2 54.5c0 27.1 14.8 26.2 14.8 26.2h8.8v-12.4s-.5-14.8 14.6-14.8h25.2s14.1.2 14.1-13.8V15.8S76.8 2 54.5 2zM38.8 9.5c2.6 0 4.8 2.1 4.8 4.8s-2.1 4.8-4.8 4.8-4.8-2.1-4.8-4.8 2.1-4.8 4.8-4.8z" fill="#387EB8"/>
+    <path d="M55.5 108c26.8 0 25.2-11.6 25.2-11.6l-.03-12.1H55.27v-3.6h35.53s17.2 2 17.2-25.2c0-27.1-14.8-26.2-14.8-26.2h-8.8v12.4s.5 14.8-14.6 14.8H49.4s-14.1-.2-14.1 13.8v13.9s-2.3 13.8 20.2 13.8zm15.7-7.5c-2.6 0-4.8-2.1-4.8-4.8s2.1-4.8 4.8-4.8 4.8 2.1 4.8 4.8-2.1 4.8-4.8 4.8z" fill="#FFE052"/>
+  </svg>
+);
+
+const VueLogo = () => (
+  <svg viewBox="0 0 261.76 226.69" className="w-13 h-13">
+    <path d="M161.096.001l-30.225 52.351L100.647.001H-.005l130.877 226.69L261.76.001z" fill="#41b883" />
+    <path d="M161.096.001l-30.225 52.351L100.647.001H52.346l78.526 136.01L209.414.001z" fill="#34495e" />
+  </svg>
+);
+
+// Authentic MongoDB Leaf Logo
+const MongoLogo = () => (
+  <svg viewBox="0 0 128 128" className="w-13 h-13">
+    <path d="M64 5C64 5 36 34 36 74C36 102 52 118 64 123C76 118 92 102 92 74C92 34 64 5 64 5Z" fill="#13AA52"/>
+    <path d="M64 5V123C76 118 92 102 92 74C92 34 64 5 64 5Z" fill="#116149"/>
+    <path d="M64 105C63.5 105 63 92 63 85C63 70 64 55 64 55C64 55 65 70 65 85C65 92 64.5 105 64 105Z" fill="#FFFFFF"/>
+  </svg>
+);
+
+// Authentic Amazon Web Services (AWS) Logo with Smile
+const AwsLogo = () => (
+  <svg viewBox="0 0 128 128" className="w-15 h-15">
+    <text x="64" y="60" textAnchor="middle" fill="#232F3E" fontWeight="900" fontSize="38" fontFamily="sans-serif" letterSpacing="1">aws</text>
+    <path d="M26 78 C 48 98, 80 98, 102 78" fill="none" stroke="#FF9900" strokeWidth="6" strokeLinecap="round" />
+    <polygon points="100,70 108,80 96,82" fill="#FF9900" />
   </svg>
 );
 
 const AngularLogo = () => (
-  <svg viewBox="0 0 250 250" className="w-16 h-16">
+  <svg viewBox="0 0 250 250" className="w-13 h-13">
     <path fill="#DD0031" d="M125 30L31.9 63.2l14.2 123.1L125 230l78.9-43.7 14.2-123.1z" />
     <path fill="#C3002F" d="M125 30v22.2-.1V230l78.9-43.7 14.2-123.1L125 30z" />
     <path fill="#FFF" d="M125 52.1L66.8 182.6h21.7l11.7-29.2h49.4l11.7 29.2h21.7L125 52.1zm17 83.3h-34l17-40.9 17 40.9z" />
   </svg>
 );
 
-const VueLogo = () => (
-  <svg viewBox="0 0 261.76 226.69" className="w-16 h-16">
-    <path d="M161.096.001l-30.225 52.351L100.647.001H-.005l130.877 226.69L261.76.001z" fill="#41b883" />
-    <path d="M161.096.001l-30.225 52.351L100.647.001H52.346l78.526 136.01L209.414.001z" fill="#34495e" />
-  </svg>
-);
-
-const MongoLogo = () => (
-  <svg viewBox="0 0 24 24" className="w-16 h-16" fill="none">
-    <path d="M11.813 24c0-11.42 7.453-14.996 7.453-14.996S11.855.75 11.855.75C11.855.75 3.94 3.728 3.94 12.87c0 10.478 7.873 11.13 7.873 11.13z" fill="#00ED64" />
-    <path d="M11.813 23.885V.915c.106.05.208.103.307.159 4.225 2.387 5.934 7.482 5.934 7.482s-4.65 2.18-6.24 15.33z" fill="#00684A" />
-    <path d="M12.289 21.637c0 .005-.002.008-.005.008-.002 0-.005-.003-.005-.008v-7.305c0-.005.003-.008.005-.008.003 0 .005.003.005.008v7.305z" fill="#fff" />
-  </svg>
-);
-
 const TailwindLogo = () => (
-  <svg viewBox="0 0 54 33" className="w-16 h-16">
+  <svg viewBox="0 0 54 33" className="w-14 h-14">
     <path fill="#38bdf8" d="M27 0c-7.2 0-11.7 3.6-13.5 10.8 2.7-3.6 5.85-4.95 9.45-4.05 2.054.513 3.522 2.004 5.147 3.653C30.744 13.09 33.808 16.2 40.5 16.2c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C36.756 3.11 33.692 0 27 0zM13.5 16.2C6.3 16.2 1.8 19.8 0 27c2.7-3.6 5.85-4.95 9.45-4.05 2.054.514 3.522 2.004 5.147 3.653C17.244 29.29 20.308 32.4 27 32.4c7.2 0 11.7-3.6 13.5-10.8-2.7 3.6-5.85 4.95-9.45 4.05-2.054-.513-3.522-2.004-5.147-3.653C23.256 19.31 20.192 16.2 13.5 16.2z" />
-  </svg>
-);
-
-const AwsLogo = () => (
-  <svg viewBox="0 0 512 512" className="w-16 h-16">
-    <path d="M376.9 286.6c-11.3 5.2-49.1 20.5-102.8 21.1-32.5.4-69.7-5.2-99-17.2-4.8-1.9-10.1.6-11.9 5.5-1.9 4.9.7 10.5 5.5 12.4 41 16.8 86.1 21.8 125.2 18.6 2.1-.2 5.9-.6 9.4-1.4l-.5 5.2c-.9 10.5.8 20.3 4.6 28.7 2 4.4 6.2 7.1 10.8 7.1 1.9 0 3.9-.5 5.7-1.4 6.5-3.2 9.2-10.9 6.1-17.4l-4-8.8c25-9 43.5-17.3 50.9-21.1 5.4-2.8 7.5-9.5 4.7-14.9-2.8-5.5-9.6-7.7-14.7-5.1zM256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0z" fill="#232F3E" fillOpacity="0" />
-    <path d="M345.5 189.6c-4.2 0-8.1 1.7-10.9 4.8-2.8-12.8-13.1-22.6-27.1-22.6-10.2 0-18.9 5.1-23.7 12.8-5.7-8.2-14.7-12.8-24.3-12.8-16.9 0-29.8 12.3-32.1 28.6-9-17.2-26.5-28.6-46.5-28.6-29.6 0-53 24.5-53 54.9 0 29.8 22.6 54.3 51.6 54.3 20.4 0 38.2-11.9 46.9-29.5 2.4 16.6 15.4 29.5 32.8 29.5 9.6 0 18.2-4.3 23.9-11.1 5.3 6.7 13.4 11.1 22.6 11.1 11.6 0 21.4-6.4 26.3-16 1.5 1.2 3.3 2 5.3 2 4.9 0 8.9-4 8.9-8.9 0-3.9-2.5-7.2-6.1-8.3l-2.8-29c.2-1.3.4-2.7.4-4.1-.1-15.4-12.3-27.1-28.2-27.1z" fill="#FF9900" />
   </svg>
 );
 
@@ -186,13 +191,13 @@ const TECH_DATA = [
     id: 'angular',
     name: 'Angular',
     icon: AngularLogo,
-    desc: "Enterprise-ready dynamic web applications."
+    desc: "Enterprise-ready dynamic web applications with robust component architectures and scalability."
   },
   {
     id: 'tailwind',
     name: 'Tailwind',
     icon: TailwindLogo,
-    desc: "Rapid UI development with utility-first CSS."
+    desc: "Rapid UI development with utility-first CSS for modern, bespoke designs and fluid responsive layouts."
   },
 ];
 
@@ -210,7 +215,6 @@ const Technologies: React.FC = () => {
   // --- GSAP ANIMATION ---
   useEffect(() => {
     let ctx = gsap.context(() => {
-
       // 1. Text Lighten Up Animation
       const wordElements = textContainerRef.current?.querySelectorAll(".word-span");
 
@@ -241,8 +245,7 @@ const Technologies: React.FC = () => {
         repeat: -1,
       });
 
-      // 3. FIXED HOVER: Use the static WRAPPER, not the moving slider
-      // Pausing instantly (duration: 0) prevents the "slide-away" glitch.
+      // 3. Hover pause
       const wrapper = wrapperRef.current;
       if (wrapper) {
         wrapper.addEventListener("mouseenter", () => animation.pause());
@@ -256,7 +259,6 @@ const Technologies: React.FC = () => {
 
   return (
     <section ref={containerRef} className="py-12 lg:py-16 bg-white relative overflow-hidden font-sans flex flex-col justify-center items-center w-full">
-
       {/* Load Urbanist Font */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
@@ -272,7 +274,8 @@ const Technologies: React.FC = () => {
         </svg>
       </div>
 
-      <div className="absolute top-10 right-0 w-[600px] h-[500px] pointer-events-none z-0 translate-x-1/4 -translate-y-1/4">
+      {/* Diagonal Ribbon: Hidden on mobile (hidden md:block) to avoid cutting through text */}
+      <div className="hidden md:block absolute top-10 right-0 w-[600px] h-[500px] pointer-events-none z-0 translate-x-1/4 -translate-y-1/4">
         <svg viewBox="0 0 500 400" className="w-full h-full">
           <path
             d="M50 350 C 200 50 400 50 450 150"
@@ -292,57 +295,57 @@ const Technologies: React.FC = () => {
 
       {/* Main Content Container */}
       <div className="container mx-auto px-4 relative z-10 w-full overflow-hidden flex flex-col items-center">
-
         {/* --- Header --- */}
         <div
           ref={textContainerRef}
           className="text-center max-w-5xl mx-auto mb-10 font-urbanist relative z-20 px-2 flex flex-wrap justify-center gap-x-[0.3em] gap-y-3 lg:gap-y-5"
         >
-          {words.map((word, i) => (
-            <span key={i} className="word-span text-3xl lg:text-5xl font-extrabold leading-[1.4] tracking-tight">
+          {words.map((word, index) => (
+            <span
+              key={index}
+              className="word-span text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight select-none"
+            >
               {word}
             </span>
           ))}
         </div>
 
-        {/* --- GSAP Infinite Carousel --- */}
-        {/* Added ref={wrapperRef} here to catch mouse events on the entire strip */}
-        <div ref={wrapperRef} className="relative w-full overflow-hidden py-4 font-urbanist">
-
-          {/* Gradient Masks */}
-          <div className="absolute top-0 left-0 w-24 h-full bg-gradient-to-r from-white to-transparent z-20 pointer-events-none"></div>
-          <div className="absolute top-0 right-0 w-24 h-full bg-gradient-to-l from-white to-transparent z-20 pointer-events-none"></div>
-
-          {/* Scrolling Track */}
-          <div ref={sliderRef} className="flex gap-5 w-max py-8">
-
-            {/* Render Data Twice for infinite loop */}
-            {[...TECH_DATA, ...TECH_DATA].map((tech, index) => (
-              <div
-                key={`${tech.id}-${index}`}
-                // GLITCH FIX: Separate the hover trigger (group) from the layout
-                // The 'group' class is on the outer wrapper.
-                // The hover effect targets 'group-hover' on the INNER content.
-                className="group relative w-[200px] min-h-[280px] flex flex-col items-center text-center shrink-0"
-              >
-                {/* INNER CARD CONTENT - This moves up, but the outer wrapper stays put */}
-                <div className="w-full h-full p-5 rounded-[20px] bg-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] border border-gray-100 flex flex-col items-center">
-
-                  {/* Icon Container */}
-                  <div className="h-24 w-24 flex items-center justify-center mb-6 rounded-full bg-gray-50 group-hover:bg-white transition-all duration-300 group-hover:scale-110">
-                    <tech.icon />
+        {/* --- Infinite Marquee Wrapper --- */}
+        <div
+          ref={wrapperRef}
+          className="w-full overflow-hidden relative cursor-grab active:cursor-grabbing py-8"
+        >
+          <div
+            ref={sliderRef}
+            className="flex gap-6 w-max"
+          >
+            {[...TECH_DATA, ...TECH_DATA].map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <div
+                  key={index}
+                  className="w-[280px] sm:w-[320px] md:w-[360px] h-[340px] bg-white rounded-[32px] p-8 flex flex-col items-center text-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-gray-100/80 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-2 transition-all duration-300 select-none group"
+                >
+                  {/* Top: Icon */}
+                  <div className="w-20 h-20 rounded-2xl bg-gray-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent />
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-lg font-bold text-black mb-2 tracking-tight">{tech.name}</h3>
+                  {/* Middle: Title */}
+                  <div className="flex flex-col items-center gap-2">
+                    <h3 className="text-xl font-urbanist font-bold text-gray-900">
+                      {item.name}
+                    </h3>
+                    <p className="text-gray-500 text-xs sm:text-sm font-urbanist leading-relaxed line-clamp-3">
+                      {item.desc}
+                    </p>
+                  </div>
 
-                  {/* Description */}
-                  <p className="text-gray-500 text-[13.5px] leading-relaxed font-medium">
-                    {tech.desc}
-                  </p>
+                  {/* Bottom: Subtle indicator dot */}
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-pink-500 group-hover:scale-125 transition-all duration-300" />
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

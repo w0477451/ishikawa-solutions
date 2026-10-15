@@ -145,7 +145,8 @@ const Testimonials: React.FC = () => {
         </svg>
       </div>
 
-      <div className="absolute top-10 right-0 w-[600px] h-[500px] pointer-events-none z-0 translate-x-1/4 -translate-y-1/4">
+      {/* Diagonal Ribbon: Hidden on mobile (hidden md:block) to avoid cutting through text */}
+      <div className="hidden md:block absolute top-10 right-0 w-[600px] h-[500px] pointer-events-none z-0 translate-x-1/4 -translate-y-1/4">
         <svg viewBox="0 0 500 400" className="w-full h-full">
           <path
             d="M50 350 C 200 50 400 50 450 150"

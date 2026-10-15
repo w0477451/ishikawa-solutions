@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook, Twitter, Instagram } from 'lucide-react';
+import { Facebook, Instagram } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
@@ -14,38 +14,38 @@ const Footer: React.FC = () => {
         
         {/* --- 1. LOGO SECTION (PNG) --- */}
         <div className="mb-8">
-           {/* Replace 'src' with the actual path to your logo file */}
            <img 
-             src="\logo (1).png" 
+             src="/logo (1).png" 
              alt="Ishikawa Solutions" 
              className="h-12 md:h-14 w-auto object-contain"
            />
         </div>
 
-        {/* --- 2. SOCIAL ICONS --- */}
+        {/* --- 2. SOCIAL ICONS (Facebook & Instagram Only) --- */}
         <div className="flex gap-5 mb-12">
-            {[Facebook, Twitter, Instagram].map((Icon, i) => (
-                <a 
-                  key={i} 
-                  href="#" 
-                  className="w-11 h-11 rounded-full bg-[#2A2A2A] flex items-center justify-center text-gray-300 hover:bg-pink-600 hover:text-white transition-all duration-300"
-                >
-                    <Icon size={20} />
-                </a>
-            ))}
+          <a 
+            href="https://www.facebook.com/people/Ishikawa-Solutions/61589137264859/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            className="w-11 h-11 rounded-full bg-[#2A2A2A] flex items-center justify-center text-gray-300 hover:bg-[#1877F2] hover:text-white transition-all duration-300 hover:scale-110 shadow-md"
+          >
+            <Facebook size={20} />
+          </a>
+          <a 
+            href="https://www.instagram.com/ishikawasolutions/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="w-11 h-11 rounded-full bg-[#2A2A2A] flex items-center justify-center text-gray-300 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-pink-500 hover:to-purple-600 hover:text-white transition-all duration-300 hover:scale-110 shadow-md"
+          >
+            <Instagram size={20} />
+          </a>
         </div>
 
-        {/* --- 3. DIVIDER & BOTTOM TEXT --- */}
-        <div className="w-full border-t border-gray-800/60 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm font-medium tracking-wide">
-            
-            <p>©2025. Ishikawa Solutions. All rights reserved</p>
-            
-            <div className="flex items-center gap-4 mt-4 md:mt-0">
-                <a href="#" className="hover:text-white transition-colors">Privacy policy</a>
-                <span className="text-gray-600">|</span>
-                <a href="#" className="hover:text-white transition-colors">Terms & conditions</a>
-            </div>
-
+        {/* --- 3. DIVIDER & BOTTOM COPYRIGHT --- */}
+        <div className="w-full border-t border-gray-800/60 pt-8 flex justify-center items-center text-gray-400 text-sm font-medium tracking-wide">
+          <p>© 2026 Ishikawa Solutions. All rights reserved.</p>
         </div>
       </div>
     </footer>

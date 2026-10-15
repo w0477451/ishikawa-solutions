@@ -69,10 +69,21 @@ const CTA: React.FC = () => {
         })
       });
 
-      const data = await response.json();
+      let data: any = {};
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = { error: text || 'Submission received' };
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit form');
+        throw new Error(data.error || 'Failed to submit form. Please check your details and try again.');
       }
 
       setStatus('success');
@@ -134,10 +145,16 @@ const CTA: React.FC = () => {
         </div>
 
         <div className="max-w-3xl mx-auto bg-gray-50 rounded-2xl md:rounded-[2.5rem] p-6 md:p-8 lg:p-12 shadow-inner relative">
-          {/* Decorative doodle */}
-          <div className="absolute -top-8 -right-8 md:-top-12 md:-right-12 lg:-right-20 w-24 md:w-32 rotate-12 text-xs md:text-sm font-handwriting text-gray-600 hidden md:block">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Infobox_info_icon.svg/1200px-Infobox_info_icon.svg.png" className="w-6 h-6 md:w-8 md:h-8 mb-2 opacity-20" alt="" />
-            <span className="font-cursive transform rotate-12 block">get 3 months free support</span>
+          {/* Decorative Offer Badge & Doodle Arrow */}
+          <div className="absolute -top-10 -right-4 md:-top-14 md:-right-10 lg:-right-16 flex flex-col items-center rotate-12 select-none pointer-events-none z-20">
+            <div className="bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] text-white font-extrabold text-[11px] md:text-xs px-3.5 py-1.5 rounded-full shadow-lg border border-white/80 whitespace-nowrap animate-bounce">
+              🎁 3 Months Free Support!
+            </div>
+            {/* Hand-drawn curved arrow pointing to the form */}
+            <svg width="44" height="44" viewBox="0 0 50 50" fill="none" className="text-[#D03BF3] transform -rotate-12 mt-1 drop-shadow">
+              <path d="M10,8 Q35,8 35,32 T18,44" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="3 3" />
+              <path d="M13,38 L18,45 L25,40" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
 
           {status === 'success' ? (

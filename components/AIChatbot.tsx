@@ -61,6 +61,52 @@ interface Message {
 }
 
 /* ------------------------------------------------------------------
+  SMART INTELLIGENT FALLBACK ENGINE
+------------------------------------------------------------------ */
+
+const getSmartResponse = (query: string): string => {
+  const q = query.toLowerCase();
+
+  // Price / Cost
+  if (q.includes("cost") || q.includes("price") || q.includes("pricing") || q.includes("charge") || q.includes("fee") || q.includes("rate") || q.includes("how much")) {
+    return "Our solutions are **100% custom-tailored** to your exact business goals, so pricing depends on scope and features.\n\n✨ To get an accurate quote and free consultation, please click **[Enquire now]** or share your **phone number** / **email** right here, and our technical director will get in touch!";
+  }
+
+  // Services / Offerings
+  if (q.includes("service") || q.includes("offer") || q.includes("what do you do") || q.includes("provide") || q.includes("help me with")) {
+    return "At **Ishikawa Solutions**, we provide full-cycle digital services:\n- 🌐 **Website Development** (High-converting, responsive business sites)\n- 🛒 **E-commerce Solutions** (Shopify, WooCommerce, custom checkout)\n- 📱 **Mobile App Development** (iOS & Android native/hybrid apps)\n- 💻 **Custom Software Development** (ERP, CRM, bespoke automation)\n- 🎨 **UI/UX Design** (Interactive Figma prototypes, design systems)\n- ☁️ **Cloud Solutions & Hosting** (AWS, setup, security, daily backups)\n- 🛠️ **Maintenance & Support** (24/7 uptime & speed monitoring)\n\nWhich service are you interested in?";
+  }
+
+  // Mobile App
+  if (q.includes("app") || q.includes("mobile") || q.includes("ios") || q.includes("android")) {
+    return "Yes! We build **high-performance mobile applications** for both iOS and Android using modern frameworks like React Native, Flutter, Swift, and Kotlin.\n\nWould you like to build a new app from scratch or improve an existing one? Drop your contact info and we can send over our app case studies!";
+  }
+
+  // Consultation / Contact / Hire / Phone
+  if (q.includes("consult") || q.includes("book") || q.includes("contact") || q.includes("call") || q.includes("phone") || q.includes("talk") || q.includes("hire") || q.includes("schedule")) {
+    return "We'd love to connect with you!\n\n1. 📞 Call us directly: **+91 99015 70724**\n2. ✉️ Email us: **business@ishikawasolutions.com**\n3. 🎯 Click the **Enquire now** button at the top to book a free consultation.\n\nOr simply type your email or phone number right here, and our team will reach out!";
+  }
+
+  // Technologies / Tech Stack
+  if (q.includes("tech") || q.includes("react") || q.includes("node") || q.includes("python") || q.includes("wordpress") || q.includes("shopify") || q.includes("stack") || q.includes("mongo")) {
+    return "We use industry-leading modern technologies tailored for scale and speed: **React.js, Next.js, Node.js, Python, Vue.js, Shopify, WordPress, AWS, and MongoDB**.\n\nDo you have a preferred stack in mind for your project?";
+  }
+
+  // Portfolio / Past work
+  if (q.includes("portfolio") || q.includes("work") || q.includes("project") || q.includes("example") || q.includes("case study")) {
+    return "We have successfully delivered solutions across **IT Industries, Healthcare, Finance & Banking, Education, Travel & Hospitality, Real Estate, Transportation, Gaming, and Retail**.\n\nCheck out the interactive portfolio carousel on our page or click **View Portfolio** to see case studies!";
+  }
+
+  // Hosting / Domain
+  if (q.includes("host") || q.includes("domain") || q.includes("server") || q.includes("ssl")) {
+    return "Yes! Every website plan includes **premium hosting, domain setup, SSL security, daily backups, and business email setup**. We handle all technical infrastructure so you can focus on growing your business.";
+  }
+
+  // Default fallback
+  return "Thanks for reaching out! At **Ishikawa Solutions**, we specialize in bespoke web development, mobile apps, and digital growth.\n\nCould you share what you'd like to build, or your **email/phone number** so our team can send you a detailed proposal?";
+};
+
+/* ------------------------------------------------------------------
   GEMINI API INTEGRATION
 ------------------------------------------------------------------ */
 
@@ -291,19 +337,14 @@ const AIChatbot: React.FC<AIChatbotProps> = ({
       );
 
     } catch (error: any) {
-      console.error("Chat error:", error);
+      console.warn("Gemini stream error, switching to smart local intelligence:", error);
 
-      let errorMessage = "⚠️ Sorry, I'm having trouble connecting. Please try again.";
-
-      if (error.message?.includes('API_KEY') || error.message?.includes('401') || error.message?.includes('403')) {
-        errorMessage = "⚠️ I'm undergoing a quick system update. Please contact us via the form instead!";
-      } else if (error.message?.includes('quota') || error.message?.includes('429')) {
-        errorMessage = "⚠️ I'm a bit overwhelmed right now. Please try again in a minute.";
-      }
+      // Instantly provide rich, reliable smart answer instead of error message
+      const smartAnswer = getSmartResponse(userText);
 
       setMessages((prev) =>
         prev.map((m) =>
-          m.id === botMsgId ? { ...m, content: errorMessage } : m
+          m.id === botMsgId ? { ...m, content: smartAnswer } : m
         )
       );
     } finally {
@@ -353,10 +394,10 @@ const AIChatbot: React.FC<AIChatbotProps> = ({
         `}</style>
 
       {/* --- TRIGGER BUTTON --- */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
-        {/* Greeting Bubble */}
+      <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 flex flex-col items-end gap-2">
+        {/* Greeting Bubble (Hidden on mobile to avoid blocking content) */}
         {!isOpen && showGreeting && (
-          <div className="bg-white px-4 py-2.5 rounded-2xl rounded-br-none shadow-lg border border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-500 mb-2 max-w-[200px]">
+          <div className="hidden sm:block bg-white px-4 py-2.5 rounded-2xl rounded-br-none shadow-lg border border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-500 mb-2 max-w-[200px]">
             <p className="text-sm font-medium text-gray-700">👋 Need help exploring ideas?</p>
           </div>
         )}
@@ -365,13 +406,13 @@ const AIChatbot: React.FC<AIChatbotProps> = ({
         {!isOpen && (
           <button
             onClick={() => setIsOpen(true)}
-            className="group relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] rounded-full shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 ring-4 ring-white/50"
+            className="group relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-[#D03BF3] to-[#22D3EE] rounded-full shadow-xl hover:shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 ring-4 ring-white/50 cursor-pointer"
             aria-label="Open chat"
           >
             <div className="absolute inset-0 rounded-full bg-white/20 animate-ping opacity-20 duration-1000"></div>
-            <MessageSquare className="w-7 h-7 text-white fill-current" />
+            <MessageSquare className="w-6 h-6 md:w-7 md:h-7 text-white fill-current" />
             {/* Status Dot */}
-            <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+            <div className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
           </button>
         )}
       </div>

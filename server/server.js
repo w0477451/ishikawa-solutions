@@ -166,18 +166,24 @@ app.post('/api/contact', async (req, res) => {
 
     const leadSource = source || 'website-form';
 
-    const contact = await Contact.create({
-      name: name || 'Anonymous User',
-      email: email || '',
-      phone: phone || '',
-      company: company || '',
-      service: service || 'General Inquiry',
-      message: message || '',
-      utm_source: utm_source || 'direct',
-      utm_medium,
-      utm_campaign,
-      source: leadSource
-    });
+    let contactId = null;
+    try {
+      const contact = await Contact.create({
+        name: name || 'Anonymous User',
+        email: email || '',
+        phone: phone || '',
+        company: company || '',
+        service: service || 'General Inquiry',
+        message: message || '',
+        utm_source: utm_source || 'direct',
+        utm_medium,
+        utm_campaign,
+        source: leadSource
+      });
+      contactId = contact.id;
+    } catch (dbErr) {
+      console.warn('⚠️ Database write skipped or offline (proceeding with email dispatch):', dbErr.message);
+    }
 
     // Track analytics
     await Analytics.create({
@@ -269,7 +275,7 @@ app.post('/api/contact', async (req, res) => {
     res.json({
       success: true,
       message: 'Thank you! We have received your enquiry and will contact you soon.',
-      contactId: contact.id
+      contactId: contactId || Date.now()
     });
   } catch (error) {
     console.error('Contact submission error:', error);

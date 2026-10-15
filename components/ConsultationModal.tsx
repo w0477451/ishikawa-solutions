@@ -110,10 +110,21 @@ export const ConsultationModalProvider: React.FC<{ children: React.ReactNode }> 
         })
       });
 
-      const data = await response.json();
+      let data: any = {};
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = { error: text || 'Submission received' };
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to submit enquiry. Please try again.');
+        throw new Error(data.error || 'Failed to submit enquiry. Please check your details and try again.');
       }
 
       setStatus('success');
